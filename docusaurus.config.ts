@@ -1,16 +1,22 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-import type {Options as IdealImageOptions} from '@docusaurus/plugin-ideal-image';
+//import type {Options as IdealImageOptions} from '@docusaurus/plugin-ideal-image';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const isRsdoctor = false;
 
+
+
 const config: Config = {
   title: 'My Site',
   tagline: 'Dinosaurs are cool',
   favicon: 'img/favicon.ico',
+  markdown: {
+    mermaid: true,
+  },
+  themes: ['@docusaurus/theme-mermaid'],
 
   // Set the production url of your site here
   url: 'https://your-docusaurus-site.example.com',
@@ -66,7 +72,6 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
-
   themeConfig: {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
@@ -89,7 +94,7 @@ const config: Config = {
           href: 'https://github.com/facebook/docusaurus',
           label: 'GitHub',
           position: 'right',
-        },
+        }
       ],
     },
     footer: {
@@ -140,6 +145,34 @@ const config: Config = {
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
+      magicComments: [
+        // Remember to extend the default highlight class name as well!
+        {
+          className: 'theme-code-block-highlighted-line',
+          line: 'highlight-next-line',
+          block: {start: 'highlight-start', end: 'highlight-end'},
+        },
+        {
+          className: 'code-block-userprompt-line',
+          line: 'user-highlight-line',
+          block: {start: 'user-highlight-start', end: 'user-highlight-end'},
+        },
+        {
+          className: 'code-block-assistant-line',
+          line: 'assistant-highlight-line',
+          block: {start: 'assistant-highlight-start', end: 'assistant-highlight-end'},
+        },
+        {
+          className: 'code-block-assistant-func-line',
+          line: 'assistant-func-highlight-line',
+          block: {start: 'assistant-func-highlight-start', end: 'assistant-func-highlight-end'},
+        },
+        {
+          className: 'code-block-system-line',
+          line: 'system-highlight-line',
+          block: {start: 'system-highlight-start', end: 'system-highlight-end'},
+        },
+      ],
     },
     plugins: [
       isRsdoctor && [
@@ -161,18 +194,17 @@ const config: Config = {
           },
         },
       ],
+      
+      '@docusaurus/theme-mermaid',
       [
-        '@docusaurus/plugin-ideal-image',
+        '@docusaurus/plugin-content-docs',
         {
-          quality: 70,
-          max: 1030,
-          min: 640,
-          steps: 2,
-          // Use false to debug, but it incurs huge perf costs
-          disableInDev: true,
-        } satisfies IdealImageOptions,
+          id: 'newDocs',
+          path: 'newDocs',
+          routeBasePath: 'newDocs',
+          sidebarPath: './sidebarsNewDocs.ts',
+        },
       ],
-      '@docusaurus/theme-mermaid'
     ],
   } satisfies Preset.ThemeConfig,
 };
