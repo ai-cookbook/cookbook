@@ -14,7 +14,7 @@ import {sortBy} from '@site/src/utils/jsUtils';
  * ADD YOUR SITE TO THE DOCUSAURUS SHOWCASE
  *
  * Please don't submit a PR yourself: use the Github Discussion instead:
- * https://github.com/facebook/docusaurus/discussions/7826
+ * https://github.com/ai-cookbook/cookbook/discussions/7826
  *
  * Instructions for maintainers:
  * - Add the site in the json array below
@@ -31,7 +31,7 @@ import {sortBy} from '@site/src/utils/jsUtils';
  * - Run optimizt manually (see resize image script comment)
  * - Open a PR and check for reported CI errors
  *
- * Example PR: https://github.com/facebook/docusaurus/pull/7620
+ * Example PR: https://github.com/ai-cookbook/cookbook/pull/7620
  */
 
 // LIST OF AVAILABLE TAGS

@@ -90,7 +90,8 @@ const config: Config = {
         },
         {to: '/showcase', label: 'Showcase', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
+          //href: 'https://github.com/ai-cookbook/cookbook',
+          href: 'https://github.com/ai-cookbook/cookbook',
           label: 'GitHub',
           position: 'right',
         }
@@ -134,7 +135,7 @@ const config: Config = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/ai-cookbook/cookbook',
             },
           ],
         },

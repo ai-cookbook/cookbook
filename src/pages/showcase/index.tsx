@@ -19,7 +19,7 @@ const TITLE = translate({message: 'Docusaurus Site Showcase'});
 const DESCRIPTION = translate({
   message: 'List of websites people are building with Docusaurus',
 });
-const SUBMIT_URL = 'https://github.com/facebook/docusaurus/discussions/7826';
+const SUBMIT_URL = 'https://github.com/ai-cookbook/cookbook/discussions/7826';
 
 function ShowcaseHeader() {
   return (
