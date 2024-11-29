@@ -59,16 +59,18 @@ sequenceDiagram
 
 Параметры внутри тела запроса 1:
 ```python
-"messages": [
-  {role:system, text:""}, # Системный промпт
-  {role:user, text:""}, # Сколько денег у меня на балансе?
-],
-"tools" [...] # Список инструментов, которые мы можем использовать
+request_body = {
+    "messages": [
+        {role:system, text:""}, # Системный промпт
+        {role:user, text:""}, # Сколько денег у меня на балансе?
+    ],
+    "tools" [...] # Список инструментов, которые мы можем использовать
+}
 ```
 Ответ 1:
 ```python
 "message": [
-  {role:assistant, toolCallList:[...]}, # описание инструментов в виде json schema
+    {role:assistant, toolCallList:[...]}, # описание инструментов в виде json schema
 ]
 ```
 **Если toolCallList есть в сообщении**, то нам нужно испольнить соответствующие функции, передав в них соответствующие аргументы. Например, для функции `def get_balance(user_id: str) -> str:` нам нужно передать аргумент `user_id`, который мы достанем из toolCallList.
@@ -77,10 +79,10 @@ sequenceDiagram
 Запрос 2:
 ```python
 "messages": [
-  {role:system, text:""},
-  {role:user, text:""},
-  {role:assistant, toolCallList:[...]},
-  {role:assistant, toolResultList:[...]}, # результаты выполненных инструментов, с 'content': '100500'
+    {role:system, text:""},
+    {role:user, text:""},
+    {role:assistant, toolCallList:[...]},
+    {role:assistant, toolResultList:[...]}, # результаты выполненных инструментов, с 'content': '100500'
 ],
 "tools" [...] # Обязательно 1 в 1 тот же список инструментов, что и в запросе 1
 ```
@@ -88,18 +90,18 @@ sequenceDiagram
 Ответ 2:
 ```python
 "message": [
-  {role:assistant, text:""}, # ответ натуральным текстом, "На вашем балансе 100500 рублей"
+    {role:assistant, text:""}, # ответ натуральным текстом, "На вашем балансе 100500 рублей"
 ]
 ```
 Запрос 3 (дальнейшее общение) :
 ```python
 "messages": [
-  {role:system, text:""},
-  {role:user, text:""},
-  {role:assistant, toolCallList:[...]},
-  {role:assistant, toolResultList:[...]},
-  {role:assistant, text:""}, 
-  {role:user, text:""}, # уточняющий вопрос пользователя
+    {role:system, text:""},
+    {role:user, text:""},
+    {role:assistant, toolCallList:[...]},
+    {role:assistant, toolResultList:[...]},
+    {role:assistant, text:""}, 
+    {role:user, text:""}, # уточняющий вопрос пользователя
 ],
 "tools" [...]
 ```

@@ -1,9 +1,10 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+
 
 
 # Tool Calling @ Yandex Cloud with API, часть 2
@@ -401,7 +402,7 @@ assistant: Вы можете себе позволить купить следу
 user: Как пелось у RX4D в "запрети мне носить сяоми", это лучший микрокомпьютер, топ за свои деньги. Оформи заказ на сяоми 4+
 
 # assistant-func-highlight-line
-assistant: {'toolCalls': [{'functionCall': {'name': 'OrderTool', 'arguments': {'productId': 'order123', 'quantity': 1}}}]}
+assistant: {'toolCalls': [{'functionCall': {'name': 'OrderTool', 'arguments': {'productId': 'siaomi453', 'quantity': 1}}}]}
 
 # assistant-func-highlight-line
 assistant: {'toolResults': [{'functionResult': {'name': 'OrderTool', 'content': "{'orderId': 'order123', 'productId': 'Сяоми 4+ pro', 'quantity': 1}"}}]}
@@ -432,6 +433,26 @@ sequenceDiagram
 </TabItem>
 <TabItem value="example1" label="База данных">
 ![sqlite](./assets/sqlite.png)
+</TabItem>
+<TabItem value="tool_code" label="process_sql_tool">
+```python
+def process_tool_sql_tool(query: str) -> List[tuple]:
+    """Обрабатывает SQL-запрос и возвращает результаты."""
+    conn = None
+    try:
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        # highlight-next-line
+        cursor.execute(query)
+        result = cursor.fetchall()
+        return result
+    except sqlite3.Error as e:
+        print(f"Ошибка при выполнении SQL-запроса: {e}")
+        return []
+    finally:
+        if conn:
+            conn.close()
+```
 </TabItem>
 </Tabs>
 
@@ -550,9 +571,42 @@ assistant: Вот список всех товаров категории 'эл�
 
 ## Дополнительно
 
-### Вызов функции с обращением к Yandex Cloud Serverless Functions
+### Вызов Yandex Cloud Serverless Functions
 
-Отправим запрос к простенькой функции, которая на вход принимает только наше время.
+Yandex Cloud Serverless Functions — это гибкая платформа, на которой можно запускать исполнение (py, js, go, etc.) функций без постоянного хостинга сервера. Для демонстрации интеграции я подготовил простенькую питон-функцию, которая принимает на вход только один параметр — name, и возвращает отформатированную строку с приветствием.
+
+<details>
+<summary>send_post_request & index.py</summary>
+
+Функция в на моём компьютере:
+```python
+def send_post_request(name):
+    url = f"https://functions.yandexcloud.net/d4ekuoccv9lmm79dh5rr?name={name}"
+    with httpx.Client() as client:
+        response = client.get(url)
+
+        return response.text
+```
+
+Функция в Yandex Cloud:
+```python
+def handler(event, context):
+    name = event['queryStringParameters']['name']
+
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Content-Type': 'text/plain'
+        },
+        'isBase64Encoded': False,
+        # highlight-next-line
+        'body': 'Hello to {} from serverless func!'.format(name)
+    }
+```
+
+</details>
+
+Давайте попросим GPT отправить к ней запрос.
 
 ```python
 serverless_func_tool = {
@@ -564,7 +618,7 @@ serverless_func_tool = {
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "Название функции для запуска"
+                        "description": "Имя пользователя"
                     }
                 },
                 "required": ["name"],
@@ -592,6 +646,8 @@ assistant: {'toolResults': [{'functionResult': {'name': 'serverless_func', 'cont
 ```
 
 ### Использование Search API (Нейро поиск) в качестве инструмента
+
+[Код функции для отправки запроса в Нейро](https://github.com/ai-cookbook/guides/blob/main/yc/function_calling_api/cloud_instruments/searchapi.py)
 
 ```python
 searchapi_tool = {
@@ -649,3 +705,4 @@ assistant: Вот информация о погоде в Москве на 28 �
 
 Переиспользуйте [сниппеты](https://github.com/ai-cookbook/guides) в своих проектах.<br />
 Поставьте нам звездочку на [GitHub](https://github.com/ai-cookbook/cookbook)!
+
