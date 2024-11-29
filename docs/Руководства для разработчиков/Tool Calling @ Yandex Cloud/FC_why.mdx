@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 1
 ---
 
 import Tabs from '@theme/Tabs';
@@ -25,6 +25,8 @@ export const Highlight = ({children, color}) => (
 * они не обладают актуальными знаниями о мире <Highlight color="#800000">Какое сегодня число?</Highlight>
 * они не могут выполнять действия, которые требуют специальных знаний <Highlight color="#800000">Точные координаты Египетской пирамиды?</Highlight>
 * они не могут воздействовать на внешние системы <Highlight color="#800000">Включи чайник на кухне</Highlight>
+
+**Function Calling (Tool Calling) - возможнось LLM вызывать внешние инструменты и интерпретировать результыты их работы.**
 
 Function Calling позволяет расширить возможности LLM, добавив в их арсенал специализированные инструменты, например:
 * Выполнение строгой логики: калькулятор, интерпретация кода на виртуальной машине
@@ -83,7 +85,62 @@ Function Calling позволяет расширить возможности LL
 }
 ```
 
-[Как использовать tool calling с моделями Yandex Cloud](https://cloud.yandex.ru/services/ai/tools)
+<Tabs>
+<TabItem value="arch1" label="Калькулятор">
+```mermaid
+sequenceDiagram
+    participant User
+    participant GPT
+    participant Calculator
+
+    User->>GPT: Сколько будет 275305 x 2453?
+    GPT->>Calculator: {"tool": "calculator", "parameters": {...}}
+    Calculator->>Calculator: Калькулятор выполняет вычисления
+    Calculator-->>GPT: 675323165
+    GPT-->>User: Ответ: 675323165
+```
+</TabItem>
+<TabItem value="arch2" label="Использование Базы данных">
+```mermaid
+sequenceDiagram
+    participant User
+    participant GPT
+    participant Computer
+    participant CRM
+
+    User->>GPT: Построй график продаж за последний месяц
+    GPT->>Computer: {"tool": "query_crm", "parameters": {...}}
+    Computer->>CRM: QL запрос к базе данных
+    CRM-->>Computer: DATA
+    Computer-->>GPT: 200
+    GPT->>Computer: python code to build a plot
+    Computer-->>User: График
+```
+</TabItem>
+<TabItem value="arch3" label="Использование API без кода">
+```mermaid
+sequenceDiagram
+    participant User
+    participant GPT
+    participant Computer
+    participant API Documentation
+    participant API
+
+    User->>GPT: Напиши запрос к API, вот дока:...
+    GPT->>API Documentation: GET https://api.example.com/data
+    API Documentation-->>GPT: "docs"
+    GPT->>Computer: python code to interact with API
+    Computer->>API: authentication
+    API-->>Computer: interaction...
+    Computer->>API: interaction...
+    API-->>Computer: final response
+    Computer-->>GPT: final response
+    GPT-->>User: Ответ: миссия выполнена
+```
+</TabItem>
+</Tabs>
+
+[Как использовать tool calling с моделями Yandex Cloud](./FC_yc1.mdx)
 
 ## Безопасность работы с внешними системами: human-in-loop
 
@@ -91,6 +148,22 @@ Function Calling позволяет расширить возможности LL
 
 Когда модель запрашивает подтверждение у пользователя перед выполнением важных действий, таких как отправка API-запросов или изменение данных в базе, это добавляет дополнительный уровень контроля **и ответственности**. Пользователь может оценить предложенное действие, внести изменения или отменить его, что снижает риски и делает использование автоматизированных инструментов более безопасным.
 
+```mermaid
+sequenceDiagram
+    participant User
+    participant GPT
+    participant Computer
+    participant API
+
+    User->>GPT: Отправь запрос к API
+    GPT-->>User: {"tool": "query_api", "parameters": {...}}
+    User->>GPT: ПОДТВЕРЖДЕНИЕ ДЕЙСТВИЯ
+    GPT->>Computer: {"tool": "query_api", "parameters": {...}}
+    Computer->>API: query
+    API-->>Computer: response
+    Computer-->>GPT: response
+    GPT-->>User: Ответ: миссия выполнена
+```
 ## Популярные инструменты
 
 1. Сервисы поисковых движков (SERP), такие как SearchAPI

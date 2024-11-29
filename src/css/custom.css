@@ -233,3 +233,31 @@ html[data-navbar='false'] .navbar {
 html[data-red-border] div#__docusaurus {
   border: red solid thick;
 }
+
+.code-block-assistant-func-line {
+  color: #c2009e !important;
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.code-block-userprompt-line {
+  color: #14c800 !important;
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.code-block-assistant-line {
+  color: #008aca !important;
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+.code-block-system-line {
+  color: #ff0000 !important;
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
