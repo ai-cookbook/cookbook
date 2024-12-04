@@ -38,7 +38,7 @@ export default function DocCategoryGeneratedIndexPageWrapper(
   return (
     <>
       <DocCategoryGeneratedIndexPage {...props} />
-      <HintFooter />
+      {/* <HintFooter /> */}
     </>
   );
 }

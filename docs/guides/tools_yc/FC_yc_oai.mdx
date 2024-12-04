@@ -1,0 +1,169 @@
+---
+sidebar_position: 4
+---
+
+# Tool Calling @ Yandex Cloud with OpenAI SDK and LangChain
+
+## Пример через OpenAI SDK
+
+```python
+import openai
+import os
+
+# укажите кредиты Yandex CLoud если используете проксю с включенной аутентификацией
+FOLDER_ID = os.getenv("FOLDER_ID")
+API_KEY_OR_IAM_KEY = os.getenv("YANDEX_API_KEY")
+key = f"{FOLDER_ID}@{API_KEY_OR_IAM_KEY}"
+
+# задайте адрес вашей прокси
+proxy_url = "https://d5dsuptti94ah28glu3i.apigw.yandexcloud.net"
+
+# создайте клиент OpenAI с измененным base_url
+oai = openai.Client(api_key=key, base_url=f"{proxy_url}/v1/")
+
+def generate_text_oai(system_prompt, user_prompt, tools=None, max_tokens=2000, temperature=0.1, model=f"yandexgpt/rc"):
+    response = oai.chat.completions.create(
+        messages=[
+            {
+                "role": "system",
+                "content": system_prompt,
+            },
+            {
+                "role": "user",
+                "content": user_prompt,
+            }
+        ],
+        model=model,
+        #max_tokens=max_tokens,
+        #temperature=0.1,
+        tools=tools,
+    )
+
+    generated_text = response.choices[0].message
+    return generated_text
+
+if __name__ == "__main__":
+    tools = [
+        {
+        "type": "function",
+        "function": {
+            "name": "get_time",
+            "description": "Use this to get the current time in a given timezone.",
+            "parameters": {
+            "type": "object",
+            "properties": {
+                "timezone": {
+                "type": "string",
+                "description": "The timezone to get the time in"
+                    }
+                },
+                "required": ["timezone"]
+                }
+            }
+        }
+    ]
+
+    print(generate_text_oai("Ты - помощник, который использует инструменты.", "Сколько времени в Москве?", tools=tools))
+```
+
+Result:
+```python
+ChatCompletionMessage(content=None, refusal=None, role='assistant', audio=None, function_call=None, tool_calls=[ChatCompletionMessageToolCall(id='call_aKOD7h0D', function=Function(arguments='{"timezone": "Europe/Moscow"}', name='get_time'), type='function')])
+```
+
+## Пример через LangChain
+
+```python yandex_llm.py
+from langchain import LLMChain
+from langchain.prompts import PromptTemplate
+from langchain_core.tools import tool
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
+
+from langchain_core.tools import tool
+from langchain_openai import ChatOpenAI
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+FOLDER = ""
+API_KEY = ""
+
+OPENAI_API_KEY = f"{FOLDER}@{API_KEY}"
+base_url = f"https://d5dsuptti94ah28glu3i.apigw.yandexcloud.net/v1/"
+
+# создайте клиент OpenAI с измененным base_url
+llm = ChatOpenAI(
+    api_key=OPENAI_API_KEY,
+    base_url=base_url,
+    model="yandexgpt/rc",
+    temperature=0
+)
+
+# создайте инструменты
+@tool
+def add(a: int, b: int) -> int:
+    """Adds a and b."""
+    return a + b
+
+@tool
+def multiply(a: int, b: int) -> int:
+    """Multiplies a and b."""
+    return a * b
+
+tools = [add, multiply]
+
+llm_with_tools = llm.bind_tools(tools)
+
+query = "What is 3 * 12? Use tools!"
+
+messages = [HumanMessage(query)]
+
+ai_msg = llm_with_tools.invoke(messages)
+
+messages.append(ai_msg)
+
+tool_results = []
+
+for tool_call in ai_msg.tool_calls:
+    selected_tool = {"add": add, "multiply": multiply}[tool_call["name"].lower()]
+    tool_msg = selected_tool.invoke(tool_call)
+    messages.append(tool_msg)
+
+messages.append(llm_with_tools.invoke(messages))
+
+messages.append(HumanMessage("What is 11 + 49? Use tools!"))
+
+# 2
+print(2)
+ai_msg = llm_with_tools.invoke(messages)
+
+
+messages.append(ai_msg)
+tool_results = []
+
+for tool_call in ai_msg.tool_calls:
+    selected_tool = {"add": add, "multiply": multiply}[tool_call["name"].lower()]
+    tool_msg = selected_tool.invoke(tool_call)
+    messages.append(tool_msg)
+
+messages.append(llm_with_tools.invoke(messages))
+
+messages.append(HumanMessage("Теперь сложи результаты!"))
+
+ai_msg = llm_with_tools.invoke(messages)
+
+messages.append(ai_msg)
+tool_results = []
+
+for tool_call in ai_msg.tool_calls:
+    selected_tool = {"add": add, "multiply": multiply}[tool_call["name"].lower()]
+    tool_msg = selected_tool.invoke(tool_call)
+    messages.append(tool_msg)
+messages.append(llm_with_tools.invoke(messages))
+
+print(messages)
+```
+
+... messages ...<br />
+Result: 96

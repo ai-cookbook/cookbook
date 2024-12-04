@@ -1,0 +1,69 @@
+---
+title: Основы
+---
+
+## Функционал:
+
+```python
+# генерация текста
+client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": 'В каком году был основан Яндекс?',
+            }
+        ],
+        model="yandexgpt/latest", 
+        # или f'gpt://{FOLDER_ID}/yandexgpt/latest' 
+        # или f'ds://{MODEL_ID}'
+        max_tokens=2000,
+        temperature=0.1,
+    )
+    
+# эмбеддинги текста
+client.embeddings.create(input = ['В каком году был основан Яндекс?'], model='text-search-doc/latest').data[0].embedding # или model=f'emb://{FOLDER_ID}/text-search-doc/latest'
+```
+
+Подробные примеры содержатся в файлах [example.py](examples/example.py), [langchain-example.py](examples/langchain-example.py) и [example.js](examples/example.js).
+
+### Поддерживаемые модели:
+
+* Все модели генерации текста, uri которых начинаются с `gpt://`
+* Все Embedding модели, uri которых начинаются с `emb://`
+* Все дообученные модели генерации текста, uri которых начинаются с `ds://`
+* Все дообученные Embedding модели, uri которых начинаются с `ds://` (пока такого функционала нет в Yandex Cloud)
+
+Фичи из SDK OpenAI: **стриминг** для генерации и **синхронные батчи** для эмбеддинг модели.
+
+Классификаторы, function calling, logprobs не поддерживаются.
+
+### Аутентификация
+
+* **На стороне прокси.** Если опенаи ключ в запросе указать `sk-my`, ` ` или пустым, то кредиты для работы с Yandex Cloud будут искаться в переменных окружения. Задайте их для работы с этим сценарием в `.env` или `Dockerfile`.
+
+* **На стороне пользователя.** Если в данную проксю будет ходит несколько пользователей, то в качестве OpenAI ключа указывайте folder_id и статический апи-ключ или IAM-ключ, разделяя их символом `@` (например `folder_id@iam_key`).
+
+#### Как получить folder_id и api_key?
+
+* [Инструкция по началу работы с YandexGPT](https://yandex.cloud/ru/docs/foundation-models/quickstart/yandexgpt#before-begin)
+* [Как получить IAM-токен / API-ключ и необходимые роли](https://yandex.cloud/ru/docs/foundation-models/api-ref/authentication#yandex-account_1)
+
+### Использование моделей gpt-4 как YandexGPT
+
+Если вы ограничены в выборе моделей, но можете указать хотя-бы api-ключ и base_url, то можете обращаться к моделям OpenAI - запросы будут мапиться на модели YandexGPT:
+- gpt-4o -> yandexgpt/latest
+- gpt-4o-mini -> yandexgpt-lite/latest
+- text-embedding-3-large, text-embedding-3-small, text-embedding-ada-002 -> text-search-doc/latest
+
+### Планы
+
+* ~~Tests~~
+* ~~Logging~~
+* ~~Error handling~~
+* ~~Стриминг~~
+* ~~Синхронные батчи эмбеддинг-модели (для langchain)~~
+* Поддержка function calling
+* Поддержка OS моделей
+* Добавить поддержку классификаторов
+* Добавить поддержку дообученных эмбеддингов
+* Добавить поддержку YandexART
