@@ -1,0 +1,137 @@
+# Использование SearchAPI с FOMO
+
+1. Начните работу в сервисах Yandex Cloud Foundational Models & SearchAPI v1
+2. Получите API ключ и ID каталога в Yandex Cloud
+3. Установите библиотеки: `pip install langchain langchain_openai requests beautifulsoup4`
+4. Создайте файл `.env` и добавьте в него следующие переменные:
+
+```
+FOLDER_ID=
+YANDEX_API_KEY=
+```
+
+5. Запустите код:
+
+```python
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+import requests
+import os
+from typing import Optional
+from langchain_openai import ChatOpenAI
+from dotenv import load_dotenv
+from bs4 import BeautifulSoup
+
+# Загрузка переменных окружения
+load_dotenv()
+
+# Получение идентификатора папки и API ключа из переменных окружения
+FOLDER_ID = os.getenv('FOLDER_ID')
+YANDEX_API_KEY = os.getenv('YANDEX_API_KEY')
+API_KEY = f"{FOLDER_ID}@{YANDEX_API_KEY}"
+base_url = f"https://d5dsuptti94ah28glu3i.apigw.yandexcloud.net/v1"
+
+# Инициализация моделей ChatOpenAI
+llm_yandex = ChatOpenAI(
+    api_key=API_KEY,
+    base_url=base_url,
+    model="yandexgpt/rc",
+    temperature=0
+)
+
+llama = ChatOpenAI(
+    api_key=API_KEY,
+    base_url=base_url,
+    model="llama/latest",
+    temperature=0
+)
+
+def get_site(url: str) -> Optional[str]:
+    """
+    Получает и возвращает текстовое содержимое веб-страницы по указанному URL.
+    """
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Проверка успешности запроса
+
+        # Парсинг содержимого страницы
+        soup = BeautifulSoup(response.content, "html.parser")
+        return soup.get_text()  # Извлечение текста
+
+    except requests.RequestException as e:
+        print(f"Ошибка при получении страницы: {e}")
+        return None
+
+def get_generative_search_response(
+    query: str,
+    folder_id: Optional[str] = None,
+    api_key: Optional[str] = None
+) -> dict:
+    """
+    Выполняет поисковый запрос с генеративным ответом через Yandex Search API.
+    """
+    # Получение кредов из переменных окружения, если они не переданы
+    folder_id = folder_id or os.getenv('FOLDER_ID')
+    api_key = api_key or os.getenv('YANDEX_API_KEY')
+
+    url = 'https://yandex.ru/search/xml/generative'
+    data = {
+        "messages": [{"content": query, "role": "user"}],
+        "site": "https://yandex.cloud/ru/docs",
+        "host": None,
+        "url": None
+    }
+
+    try:
+        response = requests.post(url, json=data)
+        response.raise_for_status()
+        return response.json()
+
+    except requests.RequestException as e:
+        print(f"Ошибка при выполнении запроса: {e}")
+        return {}
+
+# Пример использования
+query = "Сколько стоят 500 токенов YandexGPT про в синхронном режиме?"
+result = get_generative_search_response(query)
+
+# Обработка результатов
+context = ""
+for link in result.get('links', [])[:3]:
+    content = get_site(link)
+    if content:
+        context += content
+
+# Формирование сообщений для модели
+system_prompt = (
+    "Ты - полезный помощник, который помогает пользователю найти информацию в интернете. "
+    "Ниже будет контекст, который поможет тебе ответить на вопрос. "
+    "Ты можешь использовать только эти данные для ответа на вопрос. "
+    "Если тебе нужно больше информации, скажи что тебе нужна дополнительная информация."
+)
+
+messages = [
+    SystemMessage(system_prompt),
+    AIMessage(f"Контекст:\n{context}"),
+    HumanMessage(f"Вопрос:\n{query}")
+]
+
+# Получение ответа от модели
+ai_msg = llama.invoke(messages)
+print(ai_msg.content)
+```
+
+Ответ YandexGPT 4:
+
+```text
+Стоимость генерации текста рассчитывается из суммарного количества токенов промта и ответа и зависит от параметров запроса к моделям генерации.
+
+Чтобы узнать цену за 500 токенов YandexGPT Pro в синхронном режиме, нужно ознакомиться с тарифами в разделе «Правила тарификации для Yandex Foundation Models
+```
+
+Ответ LLama 3.1:
+
+```text
+Стоимость 500 токенов YandexGPT Pro в синхронном режиме составляет 0,6 ₽.
+```
+
+Второй ответ отвечает на вопрос, и является верным.

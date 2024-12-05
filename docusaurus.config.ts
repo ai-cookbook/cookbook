@@ -1,13 +1,8 @@
 import {themes as prismThemes} from 'prism-react-renderer';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-//import type {Options as IdealImageOptions} from '@docusaurus/plugin-ideal-image';
-
-// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const isRsdoctor = false;
-
-
 
 const config: Config = {
   title: 'My Site',
@@ -76,19 +71,57 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'My Site',
+      title: 'AI Cookbook',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'AI Cookbook Logo',
         src: 'img/logo.svg',
+        href: '/',
       },
       items: [
+        {to: '/showcase', label: 'GenAI маркетплейс', position: 'left'},
+        {
+          type: 'dropdown',
+          label: 'Разработчикам',
+          position: 'left',
+          items: [
+            {
+              type: 'docSidebar',
+              sidebarId: 'adapterSidebar',
+              label: 'OpenAI Адаптер',
+            },
+            {
+              type: 'docSidebar',
+              sidebarId: 'guidesSidebar',
+              label: 'Руководства @ Yandex Cloud',
+            },
+            {
+              type: 'docSidebar',
+              sidebarId: 'advancedSidebar',
+              label: 'Продвинутые инструменты',
+            },
+            {
+              type: 'docSidebar',
+              sidebarId: 'appsSidebar',
+              label: 'Self-hosted приложения',
+            },
+          ],
+        },
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Руководства',
+          sidebarId: 'bizSidebar',
+          label: 'Бизнесу',
         },
-        {to: '/showcase', label: 'Showcase', position: 'left'},
+        {
+          type: 'docSidebar',
+          sidebarId: 'promptsSidebar',
+          position: 'left',
+          label: 'Промптбук',
+        },
+        {
+          href: 'https://t.me/aicookbookbot',
+          label: 'Мне нужна помощь с деплоем',
+          position: 'right',
+        },
         {
           //href: 'https://github.com/ai-cookbook/cookbook',
           href: 'https://github.com/ai-cookbook/cookbook',
@@ -104,22 +137,18 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
-              to: '/docs/intro',
+              label: 'GenAI маркетплейс',
+              to: '/showcase',
+            },
+            {
+              label: 'Промптбук',
+              to: 'docs/prompts/',
             },
           ],
         },
         {
           title: 'Community',
           items: [
-            {
-              label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            },
-            {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
-            },
             {
               label: 'X',
               href: 'https://x.com/docusaurus',
@@ -130,17 +159,13 @@ const config: Config = {
           title: 'More',
           items: [
             {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
               label: 'GitHub',
               href: 'https://github.com/ai-cookbook/cookbook',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} AI Cookbook Ru`,
     },
     prism: {
       theme: prismThemes.github,
@@ -196,15 +221,6 @@ const config: Config = {
       ],
       
       '@docusaurus/theme-mermaid',
-      [
-        '@docusaurus/plugin-content-docs',
-        {
-          id: 'newDocs',
-          path: 'newDocs',
-          routeBasePath: 'newDocs',
-          sidebarPath: './sidebarsNewDocs.ts',
-        },
-      ],
     ],
   } satisfies Preset.ThemeConfig,
 };

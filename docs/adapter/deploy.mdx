@@ -1,0 +1,42 @@
+
+### Коммунальные трансляторы (без деплоя)
+
+1. **Yandex Cloud**, `ru-central1-a`. Stateless режим, запросы не логируются. https://apps.llmplay.space/translator Status: ![Yandex Offline](https://apps.llmplay.space/translator/badge)
+
+2. **Vercel**, `Stockholm, Sweden`. Логирование на уровне INFO (персональные данные скрыты). https://openai2yandex-translator.vercel.app Status: ![Vercel Offline](https://openai2yandex-translator.vercel.app/badge)
+
+
+### Быстрый запуск на vercel:
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fall-mute%2Fyagpt2openai_translator)
+
+- Укажите в переменных окружения `VERCEL=True`, function max duration 60 секунд в настройках проекта и сделайте редеплой.
+- Для использования автоматической аутентификации, заполните `FOLDER_ID` & `YANDEX_API_KEY` на странице деплоя.
+
+### Локальный/облачный запуск
+
+1. Если вам нужен доступ к ресурсам с автоматической аутентификацией, заполните данные параметры (in `.env` file, Dockerfile or cloud environment):
+    - `FOLDER_ID`: your Yandex Cloud folder id
+    - `YANDEX_API_KEY`: your Yandex Cloud API key
+2. Запустите приложение:
+    - `docker-compose up -d --build`. Приложение будет доступно по адресу 127.0.0.1:**9041**
+    - или (команды аналогичны для `podman`) `docker build -t image_name .`, затем `docker run -d -p 127.0.0.1:9041:9041 --name container_name image_name` 
+    - или (для локального тестирования) `pip install -r requirements.txt`, затем `python main.py`
+
+Может быть полезно: [Запуск контейнерного приложения в Yandex Serverless Containers](https://yandex.cloud/ru/docs/tutorials/serverless/deploy-app-container)
+
+### Проверка работы
+
+```bash
+curl -X POST <PROXY_URL>/v1/chat/completions \
+-H "Authorization: Bearer <FOLDER>@<IAM_OR_API>" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "yandexgpt/latest",
+    "messages": [
+        {"role": "user", "content": "В каком году Гагарин полетел в космос?"},
+        {"role": "assistant", "content": "В 1961."},
+        {"role": "user", "content": "Как назывался корабль?"}
+    ]
+}'
+```
