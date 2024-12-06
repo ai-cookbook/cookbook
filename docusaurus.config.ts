@@ -75,10 +75,9 @@ const config: Config = {
       logo: {
         alt: 'AI Cookbook Logo',
         src: 'img/logo.svg',
-        href: '/',
+        href: '/showcase',
       },
       items: [
-        {to: '/showcase', label: 'GenAI маркетплейс', position: 'left'},
         {
           type: 'dropdown',
           label: 'Разработчикам',
@@ -118,8 +117,18 @@ const config: Config = {
           label: 'Промптбук',
         },
         {
+          href: '/',
+          label: 'О проекте',
+          position: 'left',
+        },
+        {
+          href: '/contribute',
+          label: 'Конкурс на 100000₽',
+          position: 'right',
+        },
+        {
           href: 'https://t.me/aicookbookbot',
-          label: 'Мне нужна помощь с деплоем',
+          label: 'Мне нужна помощь',
           position: 'right',
         },
         {
@@ -144,14 +153,26 @@ const config: Config = {
               label: 'Промптбук',
               to: 'docs/prompts/',
             },
+            {
+              label: 'Адаптер',
+              to: 'docs/adapter/',
+            },
+            {
+              label: 'Статусы',
+              href: 'https://ai-cookbook-ru.cronitorstatus.com/',
+            },
           ],
         },
         {
           title: 'Community',
           items: [
             {
-              label: 'X',
-              href: 'https://x.com/docusaurus',
+              label: 'Сообщество',
+              href: 'https://t.me/aicookbook',
+            },
+            {
+              label: 'Contribute',
+              href: 'https://github.com/ai-cookbook/cookbook',
             },
           ],
         },
