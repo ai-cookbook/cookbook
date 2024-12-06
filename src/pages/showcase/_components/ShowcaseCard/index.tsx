@@ -61,10 +61,18 @@ function getCardImage(user: User): string {
 
 function ShowcaseCard({user}: {user: User}) {
   const image = getCardImage(user);
+  const [imageError, setImageError] = React.useState(false);
+
   return (
     <li key={user.title} className="card shadow--md">
       <div className={clsx('card__image', styles.showcaseCardImage)}>
-        <img src={image} alt={user.title} className={styles.showcaseCardImage} />
+        <img 
+          src={imageError ? '/img/default-preview.jpg' : image} 
+          alt={user.title} 
+          className={styles.showcaseCardImage}
+          loading="lazy"
+          onError={() => setImageError(true)}
+        />
       </div>
       <div className="card__body">
         <div className={clsx(styles.showcaseCardHeader)}>
@@ -88,6 +96,25 @@ function ShowcaseCard({user}: {user: User}) {
           )}
         </div>
         <p className={styles.showcaseCardBody}>{user.description}</p>
+        {user.author && (
+          <div className={styles.showcaseCardAuthor}>
+            <img 
+              src={user.author.image} 
+              alt={user.author.name}
+              className={styles.authorImage}
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = '/img/default-author.jpg';
+              }}
+            />
+            <div className={styles.authorInfo}>
+              <div className={styles.authorName}>{user.author.name}</div>
+              {user.author.title && (
+                <div className={styles.authorTitle}>{user.author.title}</div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
       <ul className={clsx('card__footer', styles.cardFooter)}>
         <ShowcaseCardTag tags={user.tags} />

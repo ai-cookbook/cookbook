@@ -58,72 +58,272 @@ export type TagType =
   // Right-to-left direction.
   | 'rtl';
 
+export type User = {
+  title: string;
+  description: string;
+  preview: string | null; // null = use our serverless screenshot service
+  website: string;
+  source: string | null;
+  tags: TagType[];
+  author?: {
+    name: string;
+    image: string;
+    title?: string;
+  };
+};
+
+export type Tag = {
+  label: string;
+  description: string;
+  color: string;
+};
+
+export const Tags: {[type in TagType]: Tag} = {
+  favorite: {
+    label: translate({message: 'Favorite'}),
+    description: translate({
+      message:
+        'Our favorite Docusaurus sites that you must absolutely check out!',
+      id: 'showcase.tag.favorite.description',
+    }),
+    color: '#e9669e',
+  },
+
+  opensource: {
+    label: translate({message: 'Open-Source'}),
+    description: translate({
+      message: 'Open-Source Docusaurus sites can be useful for inspiration!',
+      id: 'showcase.tag.opensource.description',
+    }),
+    color: '#39ca30',
+  },
+
+  product: {
+    label: translate({message: 'Product'}),
+    description: translate({
+      message: 'Docusaurus sites associated to a commercial product!',
+      id: 'showcase.tag.product.description',
+    }),
+    color: '#dfd545',
+  },
+
+  design: {
+    label: translate({message: 'Design'}),
+    description: translate({
+      message:
+        'Beautiful Docusaurus sites, polished and standing out from the initial template!',
+      id: 'showcase.tag.design.description',
+    }),
+    color: '#a44fb7',
+  },
+
+  i18n: {
+    label: translate({message: 'I18n'}),
+    description: translate({
+      message:
+        'Translated Docusaurus sites using the internationalization support with more than 1 locale.',
+      id: 'showcase.tag.i18n.description',
+    }),
+    color: '#127f82',
+  },
+
+  versioning: {
+    label: translate({message: 'Versioning'}),
+    description: translate({
+      message:
+        'Docusaurus sites using the versioning feature of the docs plugin to manage multiple versions.',
+      id: 'showcase.tag.versioning.description',
+    }),
+    color: '#fe6829',
+  },
+
+  large: {
+    label: translate({message: 'Large'}),
+    description: translate({
+      message:
+        'Very large Docusaurus sites, including many more pages than the average!',
+      id: 'showcase.tag.large.description',
+    }),
+    color: '#8c2f00',
+  },
+
+  meta: {
+    label: translate({message: 'Meta'}),
+    description: translate({
+      message: 'Docusaurus sites of Meta (formerly Facebook) projects',
+      id: 'showcase.tag.meta.description',
+    }),
+    color: '#4267b2', // Facebook blue
+  },
+
+  personal: {
+    label: translate({message: 'Personal'}),
+    description: translate({
+      message:
+        'Personal websites, blogs and digital gardens built with Docusaurus',
+      id: 'showcase.tag.personal.description',
+    }),
+    color: '#14cfc3',
+  },
+
+  rtl: {
+    label: translate({message: 'RTL Direction'}),
+    description: translate({
+      message:
+        'Docusaurus sites using the right-to-left reading direction support.',
+      id: 'showcase.tag.rtl.description',
+    }),
+    color: '#ffcfc3',
+  },
+};
+
+export const TagList = Object.keys(Tags) as TagType[];
+
 // Add sites to this list
 // prettier-ignore
 const Users: User[] = [
   {
+    title: "LobeChat",
+    description: "Современное многопользовательское приложение с чатом и плагинами. Работает с Yandex Foundation Models (YandexGPT и т.п.).",
+    preview: '/img/showcase/lobechat.jpg',
+    website: "https://lobe-chat-01-umber.vercel.app/chat",
+    source: "/docs/apps/LobeChat",
+    tags: ['product', 'opensource'],
+    author: {
+      name: "Opensource",
+      image: '/img/authors/opensource.jpg',
+      title: "Community Project"
+    }
+  },
+  {
+    title: "RAGflow",
+    description: "RAG-ориентированный опенсорсный no-code фреймворк с готовыми шаблонами для построения Advanced RAG и Agentic систем. Поддерживает Yandex Foundation Models (YandexGPT и др.).",
+    preview: '/img/showcase/ragflow.jpg',
+    website: "http://ragflow.llmplay.ru/",
+    source: "/docs/apps/RAGflow/",
+    tags: ['product', 'opensource'],
+    author: {
+      name: "Opensource",
+      image: '/img/authors/opensource.jpg',
+      title: "Community Project"
+    }
+  },
+  {
+    title: "Flowise",
+    description: "LLM-ориентированный опенсорсный no-code фреймворк с обширной библиотекой готовых шаблонов для решения задач с использованием LLM, включая Yandex Foundation Models (YandexGPT и др.).",
+    preview: '/img/showcase/flowise.jpg',
+    website: "http://flowise-vm.llmplay.ru:3000/",
+    source: "https://github.com/FlowiseAI/Flowise",
+    tags: ['product', 'opensource'],
+    author: {
+      name: "Opensource",
+      image: '/img/authors/opensource.jpg',
+      title: "Community Project"
+    }
+  },
+  {
     title: "YandexGPT чат-бот",
     description: "Чат-бот на базе YandexGPT с поддержкой истории общения и настройки системного промпта. Требует ввода своих credentials.",
-    preview: require('./showcase/yandexgpt-chatbot.jpg'),
+    preview: '/img/showcase/yandexgpt-chatbot.jpg',
     website: "https://yagpt-chatbot-context.streamlit.app/",
     source: null,
     tags: ['product', 'favorite'],
+    author: {
+      name: "Dmitry Zhechkov",
+      image: '/img/authors/dzhechkov.jpg',
+      title: "AI Engineer"
+    }
   },
   {
     title: "YandexGPT RAG-playground",
     description: "Playground по построению вопросно-ответной системы на базе YandexGPT. Можно загружать документы в pdf. MDB Opensearch уже создана. Необходимо указать название поискового индекса и все credentials для YandexGPT.",
-    preview: require('./showcase/yandexgpt-rag.jpg'),
+    preview: '/img/showcase/yandexgpt-rag.jpg',
     website: "https://yagpt-rag-oob.streamlit.app/",
     source: null,
     tags: ['product', 'favorite'],
+    author: {
+      name: "Dmitry Zhechkov",
+      image: '/img/authors/dzhechkov.jpg',
+      title: "AI Engineer"
+    }
   },
   {
     title: "YandexGPT суммаризатор",
     description: "Суммаризатор текста бесконечного размера на базе YandexGPT.",
-    preview: require('./showcase/yandexgpt-summarizer.jpg'),
+    preview: '/img/showcase/yandexgpt-summarizer.jpg',
     website: "http://monbot.llmplay.ru:8504/",
     source: null,
     tags: ['product'],
+    author: {
+      name: "Dmitry Zhechkov",
+      image: '/img/authors/dzhechkov.jpg',
+      title: "AI Engineer"
+    }
   },
   {
     title: "Tokenizer YandexGPT",
     description: "YandexGPT-токенизатор текста бесконечного размера.",
-    preview: require('./showcase/yandexgpt-tokenizer.jpg'),
+    preview: '/img/showcase/yandexgpt-tokenizer.jpg',
     website: "http://tokenizer.llmplay.ru:8501/",
     source: null,
     tags: ['product'],
+    author: {
+      name: "Dmitry Zhechkov",
+      image: '/img/authors/dzhechkov.jpg',
+      title: "AI Engineer"
+    }
   },
   {
     title: "HR-bot по вакансии",
     description: "Помощник рекрутера, отвечает на вопросы по определенной вакансии (Архитектор в 'Яндекс Облако').",
-    preview: require('./showcase/hr-bot-vacancy.jpg'),
+    preview: '/img/showcase/hr-bot-vacancy.jpg',
     website: "http://monbot.llmplay.ru:8501/",
     source: null,
     tags: ['product', 'favorite'],
+    author: {
+      name: "Dmitry Zhechkov",
+      image: '/img/authors/dzhechkov.jpg',
+      title: "AI Engineer"
+    }
   },
   {
     title: "HR-bot для онбоардинга",
     description: "Помощник кадровика для онбоардинга новых сотрудников. Отвечает на вопросы по кодексу корпоративной этики ПАО Газпром.",
-    preview: require('./showcase/hr-bot-onboarding.jpg'),
+    preview: '/img/showcase/hr-bot-onboarding.jpg',
     website: "http://monbot.llmplay.ru:8502/",
     source: null,
     tags: ['product'],
+    author: {
+      name: "Dmitry Zhechkov",
+      image: '/img/authors/dzhechkov.jpg',
+      title: "AI Engineer"
+    }
   },
   {
     title: "MosRu-bot",
     description: "Помощник по 10-ти документам сайта mos.ru 'Как оформить быстро и правильно?'",
-    preview: require('./showcase/mosru-bot.jpg'),
+    preview: '/img/showcase/mosru-bot.jpg',
     website: "http://monbot.llmplay.ru:8503/",
     source: null,
     tags: ['product'],
+    author: {
+      name: "Dmitry Zhechkov",
+      image: '/img/authors/dzhechkov.jpg',
+      title: "AI Engineer"
+    }
   },
   {
     title: "AI-флорист",
-    description: "Флорист, который помогает подобратьбукет цветов для любого случая.",
-    preview: require('./showcase/ai-florist.jpg'),
+    description: "Флорист, который помогает подобрать букет цветов для любого случая.",
+    preview: '/img/showcase/ai-florist.jpg',
     website: "http://ai-buket.llmplay.ru:5000/",
     source: null,
     tags: ['product', 'design'],
+    author: {
+      name: "Dmitry Zhechkov",
+      image: '/img/authors/dzhechkov.jpg',
+      title: "AI Engineer"
+    }
   },
 
 
@@ -2460,121 +2660,6 @@ const Users: User[] = [
    */
 ];
 
-export type User = {
-  title: string;
-  description: string;
-  preview: string | null; // null = use our serverless screenshot service
-  website: string;
-  source: string | null;
-  tags: TagType[];
-};
-
-export type Tag = {
-  label: string;
-  description: string;
-  color: string;
-};
-
-export const Tags: {[type in TagType]: Tag} = {
-  favorite: {
-    label: translate({message: 'Favorite'}),
-    description: translate({
-      message:
-        'Our favorite Docusaurus sites that you must absolutely check out!',
-      id: 'showcase.tag.favorite.description',
-    }),
-    color: '#e9669e',
-  },
-
-  opensource: {
-    label: translate({message: 'Open-Source'}),
-    description: translate({
-      message: 'Open-Source Docusaurus sites can be useful for inspiration!',
-      id: 'showcase.tag.opensource.description',
-    }),
-    color: '#39ca30',
-  },
-
-  product: {
-    label: translate({message: 'Product'}),
-    description: translate({
-      message: 'Docusaurus sites associated to a commercial product!',
-      id: 'showcase.tag.product.description',
-    }),
-    color: '#dfd545',
-  },
-
-  design: {
-    label: translate({message: 'Design'}),
-    description: translate({
-      message:
-        'Beautiful Docusaurus sites, polished and standing out from the initial template!',
-      id: 'showcase.tag.design.description',
-    }),
-    color: '#a44fb7',
-  },
-
-  i18n: {
-    label: translate({message: 'I18n'}),
-    description: translate({
-      message:
-        'Translated Docusaurus sites using the internationalization support with more than 1 locale.',
-      id: 'showcase.tag.i18n.description',
-    }),
-    color: '#127f82',
-  },
-
-  versioning: {
-    label: translate({message: 'Versioning'}),
-    description: translate({
-      message:
-        'Docusaurus sites using the versioning feature of the docs plugin to manage multiple versions.',
-      id: 'showcase.tag.versioning.description',
-    }),
-    color: '#fe6829',
-  },
-
-  large: {
-    label: translate({message: 'Large'}),
-    description: translate({
-      message:
-        'Very large Docusaurus sites, including many more pages than the average!',
-      id: 'showcase.tag.large.description',
-    }),
-    color: '#8c2f00',
-  },
-
-  meta: {
-    label: translate({message: 'Meta'}),
-    description: translate({
-      message: 'Docusaurus sites of Meta (formerly Facebook) projects',
-      id: 'showcase.tag.meta.description',
-    }),
-    color: '#4267b2', // Facebook blue
-  },
-
-  personal: {
-    label: translate({message: 'Personal'}),
-    description: translate({
-      message:
-        'Personal websites, blogs and digital gardens built with Docusaurus',
-      id: 'showcase.tag.personal.description',
-    }),
-    color: '#14cfc3',
-  },
-
-  rtl: {
-    label: translate({message: 'RTL Direction'}),
-    description: translate({
-      message:
-        'Docusaurus sites using the right-to-left reading direction support.',
-      id: 'showcase.tag.rtl.description',
-    }),
-    color: '#ffcfc3',
-  },
-};
-
-export const TagList = Object.keys(Tags) as TagType[];
 function sortUsers() {
   let result = Users;
   // Sort by site name
