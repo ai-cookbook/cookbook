@@ -1,7 +1,188 @@
-## Решение проблем
+# Быстрый старт
 
-Если у вас возникли проблемы по работе с этим приложением, **пожалуйста, создайте issue** в этом репозитории, он активно поддерживается. Оперативно по проблемам писать tg `@nongilgameshj`
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-* Чтобы ходить в дообученную gpt, пользователь/сервисный аккаунт должны быть участниками проекта DataShpere с ролью `developer`
-* При деплое через serverless платформы (vervel, yc functions) не забудьте выставить timeout 60 секунд
-* Ошибка 429: проблема на стороне облака. Мы фиксим данную проблему, но пока рекомендуется отправлять запросы с ретраями.
+Для начала работы с YandexGPT и адаптером вам потребуется folder_id и api_key от сервисного аккаунта с необходимыми ролями:
+
+* [Инструкция по началу работы с YandexGPT](https://yandex.cloud/ru/docs/foundation-models/quickstart/yandexgpt#before-begin)
+* [Как получить IAM-токен / API-ключ и необходимые роли](https://yandex.cloud/ru/docs/foundation-models/api-ref/authentication#yandex-account_1)
+
+### Endpoints
+
+Рекомендуется использовать готовый эндпоинт:
+
+* **Stable** `Yandex Cloud, on-edge`: https://o2y.ai-cookbook.ru/v1 ![status](https://o2y.ai-cookbook.ru/badge) ![branch](https://img.shields.io/badge/branch-stable-blue)
+
+Про [стабильность и безопасность](./stability-safety.mdx) публичного эндопинта.
+
+### Использование
+
+Импортируйте библиотеку openai и создайте клиент на любом языке программирования.
+
+<Tabs groupId="language">
+<TabItem value="python" label="Python">
+`pip install openai`
+
+```python
+import openai
+
+proxy_url = "https://o2y.ai-cookbook.ru"
+
+# С аутентификацией запроса
+client = openai.Client(api_key=f"{FOLDER_ID}@{API_KEY_OR_IAM_KEY}", base_url=f"{proxy_url}/v1/")
+# Или с автоматической аутентификацией
+client = openai.Client(api_key=f"sk-my", base_url=f"{proxy_url}/v1/")
+```
+</TabItem>
+
+<TabItem value="js" label="JavaScript">
+`npm install openai`
+
+```js
+const OpenAI = require('openai');
+
+const openai = new OpenAI({
+  apiKey: `${FOLDER_ID}@${YANDEX_API_KEY}`,
+  baseURL: "https://o2y.ai-cookbook.ru/v1",
+});
+```
+</TabItem>
+<TabItem value="langchain" label="Langchain">
+`pip install langcain langchain-openai`
+
+```python
+from langchain_openai import ChatOpenAI
+import os
+
+FOLDER_ID = os.getenv("FOLDER_ID")
+YANDEX_API_KEY = os.getenv("YANDEX_API_KEY")
+PROXY_URL = "https://o2y.ai-cookbook.ru/v1"
+
+API_KEY = f"{FOLDER_ID}@{YANDEX_API_KEY}"
+
+llm = ChatOpenAI(
+    api_key=API_KEY,
+    base_url=PROXY_URL,
+    model="yandexgpt/latest",
+)
+```
+</TabItem>
+
+</Tabs>
+
+Теперь вы можете использовать функционал адаптера, например:
+
+<Tabs groupId="language">
+<TabItem value="python" label="Python">
+```python
+# генерация текста
+message = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": 'В каком году был основан Яндекс?',
+            }
+        ],
+        model="yandexgpt/latest", 
+        # или "gpt-4o"
+        # или "llama/latest"
+        # или f'gpt://{FOLDER_ID}/yandexgpt/latest' 
+        # или f'ds://{MODEL_ID}'
+        max_tokens=2000,
+        temperature=0.1,
+    )
+
+print(message.choices[0].message.content)
+    
+# эмбеддинги текста
+client.embeddings.create(input = ['В каком году был основан Яндекс?'], model='text-search-doc/latest').data[0].embedding
+# или model=f'emb://{FOLDER_ID}/text-search-doc/latest'
+```
+</TabItem>
+
+<TabItem value="js" label="JavaScript">
+```js
+// генерация текста
+const completion = await openai.chat.completions.create({
+  messages: [
+    {
+      role: "user",
+      content: "В каком году был основан Яндекс?",
+    }
+  ],
+  model: "yandexgpt/latest",
+  // или "gpt-4"
+  // или "llama/latest"
+  // или `gpt://${FOLDER_ID}/yandexgpt/latest`
+  // или `ds://${MODEL_ID}`
+  max_tokens: 2000,
+  temperature: 0.1,
+});
+
+console.log(completion.choices[0].message.content);
+
+// эмбеддинги текста
+const embeddings = await openai.embeddings.create({
+  input: ["В каком году был основан Яндекс?"],
+  model: "text-search-doc/latest",
+  // или `emb://${FOLDER_ID}/text-search-doc/latest`
+});
+console.log(embeddings.data[0].embedding);
+```
+</TabItem>
+
+<TabItem value="langchain" label="Langchain">
+
+# генерация текста
+```python
+response = llm.invoke("В каком году был основан Яндекс?")
+print(response.content)
+
+# эмбеддинги текста
+from langchain_openai import OpenAIEmbeddings
+
+embeddings = OpenAIEmbeddings(
+    api_key=API_KEY,
+    base_url=PROXY_URL,
+    model="text-search-doc/latest"
+)
+
+text = "В каком году был основан Яндекс?"
+embedding_vector = embeddings.embed_query(text)
+print(embedding_vector)
+```
+</TabItem>
+
+<TabItem value="curl" label="Curl">
+```bash
+curl -X POST https://o2y.ai-cookbook.ru/v1/chat/completions \
+-H "Authorization: Bearer <FOLDER>@<IAM_OR_API>" \
+-H "Content-Type: application/json" \
+-d '{
+    "model": "yandexgpt/latest",
+    "messages": [
+        {"role": "user", "content": "В каком году Гагарин полетел в космос?"},
+        {"role": "assistant", "content": "В 1961."},
+        {"role": "user", "content": "Как назывался корабль?"}
+    ]
+}'
+```
+</TabItem>
+
+</Tabs>
+
+Также адаптер поддерживает:
+    * стриминговый ответ
+    * toolCalls
+    * ~~использование YandexGPT классификаторов~~ (скоро)
+    * батч-генерацию эмбеддингов в синхронном запросе
+    * маппинг моделей (например, `gpt-4o` -> `yandexgpt/latest`)
+
+[подробнее о функционале адаптера](./functionality/basics.mdx)
+
+:::warning
+
+Deprecated режим работы с инструментами function calling и сообщения `assistant` с результатом работы инструментов не поддерживается адаптером. **Вместо этого используйте `tool_calls` и сообщения с ролью `tool`.**
+
+:::

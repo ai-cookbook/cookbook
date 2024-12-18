@@ -16,7 +16,7 @@ API_KEY_OR_IAM_KEY = os.getenv("YANDEX_API_KEY")
 key = f"{FOLDER_ID}@{API_KEY_OR_IAM_KEY}"
 
 # задайте адрес вашей прокси
-proxy_url = "https://d5dsuptti94ah28glu3i.apigw.yandexcloud.net"
+proxy_url = "https://o2y.ai-cookbook.ru"
 
 # создайте клиент OpenAI с измененным base_url
 oai = openai.Client(api_key=key, base_url=f"{proxy_url}/v1/")
@@ -90,7 +90,7 @@ FOLDER = ""
 API_KEY = ""
 
 OPENAI_API_KEY = f"{FOLDER}@{API_KEY}"
-base_url = f"https://d5dsuptti94ah28glu3i.apigw.yandexcloud.net/v1/"
+base_url = f"https://o2y.ai-cookbook.ru/v1/"
 
 
 llm = ChatOpenAI(

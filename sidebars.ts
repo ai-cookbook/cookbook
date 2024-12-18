@@ -18,13 +18,18 @@ const sidebars: SidebarsConfig = {
       label: 'Начало работы',
     },
     {
+      type: 'doc',
+      id: 'adapter/public-endpoints',
+      label: 'Публичные эндпоинты',
+    },
+    {
       type: 'category',
       label: 'Функционал',
       items: [
         'adapter/functionality/basics',
-        'adapter/functionality/autoauth',
         'adapter/functionality/clf',
-        'adapter/functionality/using-tools'
+        'adapter/functionality/using-tools',
+        'adapter/functionality/mapping',
       ],
       collapsed: false,
     },
@@ -44,14 +49,9 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: 'doc',
-      id: 'adapter/stability-safety',
-      label: 'Стабильность и безопасность',
-    },
-    {
       type: 'link',
       label: 'Source code',
-      href: 'https://github.com/all-mute/openai2yandex_api_adapter',
+      href: 'https://github.com/ai-cookbook/openai-yandexgpt-adapter',
     },
     {
       type: 'doc',
