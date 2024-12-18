@@ -221,10 +221,13 @@ const config: Config = {
       ],
     },
     plugins: [
-      ['docusaurus-plugin-yandex-metrica', {
-        counterID: '99255215',
-        webvisor: true,
-      }],
+      [
+        'vercel-analytics',
+        {
+          debug: true,
+          mode: 'auto',
+        },
+      ],
       isRsdoctor && [
         'rsdoctor',
         {
