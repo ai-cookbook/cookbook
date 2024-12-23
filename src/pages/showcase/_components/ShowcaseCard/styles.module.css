@@ -41,8 +41,9 @@
 
 .showcaseCardHeader {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 12px;
+  flex-wrap: wrap;
 }
 
 .showcaseCardTitle {
@@ -135,14 +136,6 @@
 .showcaseCardAuthor {
   display: flex;
   align-items: center;
-  margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid var(--ifm-color-emphasis-200);
-  transition: background-color 0.2s ease;
-  padding: 1rem;
-  margin: 0 -1rem -1rem -1rem;
-  border-radius: 0 0 var(--ifm-card-border-radius) var(--ifm-card-border-radius);
-  min-height: 85px;
 }
 
 .authorImage {
@@ -243,4 +236,49 @@
 .showcaseCardAuthorClickable:hover .showcaseCardAuthorName {
   text-decoration: none !important;
   color: inherit;
+}
+
+.publishDate {
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-600);
+  padding-left: 1rem;
+  align-self: flex-end;
+  white-space: nowrap;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.showcaseCardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.tagsAndDateContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.publishDate {
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-600);
+  white-space: nowrap;
+  margin-left: 1rem;
 }

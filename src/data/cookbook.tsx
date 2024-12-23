@@ -7,14 +7,18 @@ export type Author = {
   profileUrl?: string;
 };
 
-export type CookbookEntry = {
+export type DifficultyType = 'beginner' | 'intermediate' | 'advanced';
+
+export type Recipe = {
   title: string;
   description: string;
-  preview?: string;
+  preview: string;
   website: string;
+  source?: string;
   tags: TagType[];
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  difficulty: DifficultyType;
   author?: Author;
+  publishDate: string;
 };
 
 export type TagType =
@@ -73,7 +77,7 @@ const defaultAuthor: Author = {
   profileUrl: "https://merkulov.ai"
 };
 
-export const CookbookList: CookbookEntry[] = [
+export const CookbookList: Recipe[] = [
   {
     title: 'Building a Telegram Bot Demo',
     description: 'Step-by-step guide on creating a Telegram bot with advanced features',
@@ -81,7 +85,8 @@ export const CookbookList: CookbookEntry[] = [
     website: '/docs/guides/tgbot_demo',
     tags: ['telegram', 'favorite'],
     difficulty: 'beginner',
-    author: defaultAuthor
+    author: defaultAuthor,
+    publishDate: '2024-11-20'
   },
   {
     title: 'SERP FOMO Collaboration',
@@ -90,7 +95,8 @@ export const CookbookList: CookbookEntry[] = [
     website: '/docs/guides/serp_fomo_collab',
     tags: ['searchapi', 'fomo'],
     difficulty: 'intermediate',
-    author: defaultAuthor
+    author: defaultAuthor,
+    publishDate: '2024-11-25'
   },
   {
     title: 'Search API with FOMO',
@@ -99,7 +105,8 @@ export const CookbookList: CookbookEntry[] = [
     website: '/docs/guides/searchapi_fomo',
     tags: ['searchapi', 'fomo'],
     difficulty: 'intermediate',
-    author: defaultAuthor
+    author: defaultAuthor,
+    publishDate: '2024-11-30'
   },
   {
     title: 'YandexGPT Tools',
@@ -108,7 +115,8 @@ export const CookbookList: CookbookEntry[] = [
     website: '/docs/guides/tools_yc',
     tags: ['yandexgpt'],
     difficulty: 'intermediate',
-    author: defaultAuthor
+    author: defaultAuthor,
+    publishDate: '2024-12-05'
   },
   {
     title: 'Adapter Implementation',
@@ -118,6 +126,7 @@ export const CookbookList: CookbookEntry[] = [
     tags: ['adapter'],
     difficulty: 'advanced',
     author: defaultAuthor,
+    publishDate: '2024-12-08'
   },
   {
     title: 'Getting Started with LangGraph',
@@ -126,7 +135,8 @@ export const CookbookList: CookbookEntry[] = [
     website: '/docs/advanced/langgraph-start',
     tags: ['langgraph'],
     difficulty: 'advanced',
-    author: defaultAuthor
+    author: defaultAuthor,
+    publishDate: '2024-12-12'
   },
 ];
 

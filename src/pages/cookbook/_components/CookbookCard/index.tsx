@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import Translate from '@docusaurus/Translate';
-import {Tags, TagList, type TagType, type CookbookEntry} from '@site/src/data/cookbook';
+import {Tags, TagList, type TagType, type Recipe} from '@site/src/data/cookbook';
 import {sortBy} from '@site/src/utils/jsUtils';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
@@ -52,7 +52,7 @@ function getDifficultyColor(difficulty: string): string {
   }
 }
 
-function CookbookCard({guide}: {guide: CookbookEntry}) {
+function CookbookCard({guide}: {guide: Recipe}) {
   return (
     <li key={guide.title} className="card shadow--md">
       <div className="card__body">
@@ -70,6 +70,24 @@ function CookbookCard({guide}: {guide: CookbookEntry}) {
           </span>
         </div>
         <p className={styles.cookbookCardBody}>{guide.description}</p>
+      </div>
+
+      <div className={styles.cardFooter}>
+        <div className={styles.tagsContainer}>
+          <CookbookCardTag tags={guide.tags} />
+        </div>
+        {guide.publishDate && (
+          <div className={styles.publishDate}>
+            {new Date(guide.publishDate).toLocaleDateString('ru-RU', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })}
+          </div>
+        )}
+      </div>
+
+      <div className={styles.cookbookCardFooter}>
         {guide.author && (
           <div 
             className={clsx(
@@ -88,10 +106,6 @@ function CookbookCard({guide}: {guide: CookbookEntry}) {
               src={guide.author.image} 
               alt={guide.author.name}
               className={styles.authorImage}
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = '/img/default-author.jpg';
-              }}
             />
             <div className={styles.authorInfo}>
               <div className={styles.authorName}>{guide.author.name}</div>
@@ -102,9 +116,6 @@ function CookbookCard({guide}: {guide: CookbookEntry}) {
           </div>
         )}
       </div>
-      <ul className={clsx('card__footer', styles.cardFooter)}>
-        <CookbookCardTag tags={guide.tags} />
-      </ul>
     </li>
   );
 }
