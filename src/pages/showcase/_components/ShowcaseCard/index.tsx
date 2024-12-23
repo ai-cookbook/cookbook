@@ -97,15 +97,23 @@ function ShowcaseCard({user}: {user: User}) {
         </div>
         <p className={styles.showcaseCardBody}>{user.description}</p>
         {user.author && (
-          <div className={styles.showcaseCardAuthor}>
+          <div 
+            className={clsx(
+              styles.showcaseCardAuthor,
+              user.author.profileUrl && styles.showcaseCardAuthorClickable
+            )}
+            onClick={() => {
+              if (user.author?.profileUrl) {
+                window.open(user.author.profileUrl, '_blank');
+              }
+            }}
+            role={user.author.profileUrl ? "link" : "presentation"}
+            style={user.author.profileUrl ? { cursor: 'pointer' } : undefined}
+          >
             <img 
               src={user.author.image} 
               alt={user.author.name}
               className={styles.authorImage}
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = '/img/default-author.jpg';
-              }}
             />
             <div className={styles.authorInfo}>
               <div className={styles.authorName}>{user.author.name}</div>

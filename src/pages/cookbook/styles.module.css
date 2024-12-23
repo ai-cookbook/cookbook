@@ -1,0 +1,93 @@
+.filterCheckbox {
+  --height: 2.5rem;
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+}
+
+.filterLabel {
+  margin-right: 1rem;
+  font-weight: 500;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.filterButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.filterButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: transparent;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.filterButton:hover {
+  background: var(--ifm-color-emphasis-200);
+  border-color: var(--ifm-color-emphasis-400);
+}
+
+.filterButtonSelected {
+  background: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  color: white;
+}
+
+.filterButtonSelected:hover {
+  background: var(--ifm-color-primary-darker);
+  border-color: var(--ifm-color-primary-darker);
+}
+
+.filterColor {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+}
+
+.showcaseGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.showcaseEmpty {
+  text-align: center;
+  padding: 4rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+@media (max-width: 996px) {
+  .showcaseGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .showcaseGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .filterCheckbox {
+    gap: 0.5rem;
+  }
+  
+  .filterButtons {
+    gap: 0.4rem;
+  }
+  
+  .filterButton {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8125rem;
+  }
+} 

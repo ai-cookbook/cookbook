@@ -9,12 +9,14 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  min-height: 450px;
 }
 
 :global(.card__body) {
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 215px;
 }
 
 .showcaseCardImage {
@@ -45,7 +47,10 @@
 
 .showcaseCardTitle {
   margin-bottom: 0;
-  flex: 1 1 auto;
+  margin-right: 1rem;
+  flex: 1;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .showcaseCardTitle a {
@@ -72,6 +77,7 @@
   padding-left: 12px;
   padding-right: 12px;
   border: none;
+  font-size: 0.9rem;
 }
 
 .showcaseCardSrcBtn:focus-visible {
@@ -88,8 +94,10 @@
 }
 
 .showcaseCardBody {
-  font-size: smaller;
-  line-height: 1.66;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  color: var(--ifm-color-emphasis-800);
   flex: 1;
 }
 
@@ -99,7 +107,7 @@
 }
 
 .tag {
-  font-size: 0.675rem;
+  font-size: 0.875rem;
   border: 1px solid var(--ifm-color-secondary-darkest);
   cursor: default;
   margin-right: 6px;
@@ -107,18 +115,21 @@
   border-radius: 12px;
   display: inline-flex;
   align-items: center;
+  padding: 2px 8px;
+  background: rgba(31, 34, 37, 0.4);
 }
 
 .tag .textLabel {
-  margin-left: 8px;
+  margin-left: 4px;
+  font-weight: 500;
 }
 
 .tag .colorLabel {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  margin-left: 6px;
-  margin-right: 6px;
+  margin-left: 4px;
+  margin-right: 4px;
 }
 
 .showcaseCardAuthor {
@@ -127,6 +138,11 @@
   margin-top: auto;
   padding-top: 1rem;
   border-top: 1px solid var(--ifm-color-emphasis-200);
+  transition: background-color 0.2s ease;
+  padding: 1rem;
+  margin: 0 -1rem -1rem -1rem;
+  border-radius: 0 0 var(--ifm-card-border-radius) var(--ifm-card-border-radius);
+  min-height: 85px;
 }
 
 .authorImage {
@@ -150,4 +166,81 @@
 .authorTitle {
   font-size: 0.875rem;
   color: var(--ifm-color-emphasis-600);
+}
+
+.showcaseCardLink {
+  color: rgb(20, 216, 161);
+  text-decoration: none;
+}
+
+.showcaseCardLink:hover {
+  text-decoration: underline;
+}
+
+.authorContainer {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.authorContainer:hover {
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.authorImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.authorInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.authorName {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--ifm-color-emphasis-900);
+}
+
+.authorTitle {
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.showcaseCardAuthorClickable {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease-in-out;
+  text-decoration: none !important;
+  color: inherit;
+}
+
+.showcaseCardAuthorClickable:hover {
+  background-color: var(--ifm-color-emphasis-100);
+  cursor: pointer;
+}
+
+.showcaseCardAuthorName {
+  text-decoration: none !important;
+  color: inherit;
+}
+
+.showcaseCardAuthorClickable:hover .showcaseCardAuthorName {
+  text-decoration: none !important;
+  color: inherit;
 }

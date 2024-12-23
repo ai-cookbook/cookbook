@@ -39,37 +39,26 @@ import {sortBy} from '@site/src/utils/jsUtils';
 // Please choose all tags that you think might apply.
 // We'll remove inappropriate tags, but it's less likely that we add tags.
 export type TagType =
-  // DO NOT USE THIS TAG: we choose sites to add to favorites
   | 'favorite'
-  // For open-source sites, a link to the source code is required.
-  // The source should be the *website's* source, not the project's source!
   | 'opensource'
   | 'product'
-  // Feel free to add the 'design' tag as long as there's _some_ level of
-  // CSS/swizzling.
-  | 'design'
-  // Site must have more than one locale.
-  | 'i18n'
-  | 'versioning'
-  // Large sites are defined as those with > 200 pages, excluding versions.
-  | 'large'
-  | 'meta'
-  | 'personal'
-  // Right-to-left direction.
-  | 'rtl';
+  | 'design';
+
+export type Author = {
+  name: string;
+  image: string;
+  title?: string;
+  profileUrl?: string;
+};
 
 export type User = {
   title: string;
   description: string;
-  preview: string | null; // null = use our serverless screenshot service
+  preview: string;
   website: string;
   source: string | null;
   tags: TagType[];
-  author?: {
-    name: string;
-    image: string;
-    title?: string;
-  };
+  author?: Author;
 };
 
 export type Tag = {
@@ -78,104 +67,40 @@ export type Tag = {
   color: string;
 };
 
-export const Tags: {[type in TagType]: Tag} = {
+export const Tags = {
   favorite: {
     label: translate({message: 'Favorite'}),
     description: translate({
-      message:
-        'Our favorite Docusaurus sites that you must absolutely check out!',
+      message: 'Our favorite Docusaurus sites that you must absolutely check out!',
       id: 'showcase.tag.favorite.description',
     }),
     color: '#e9669e',
   },
-
   opensource: {
     label: translate({message: 'Open-Source'}),
     description: translate({
-      message: 'Open-Source Docusaurus sites can be useful for inspiration!',
+      message: 'Open source applications built with Yandex Foundation Models',
       id: 'showcase.tag.opensource.description',
     }),
     color: '#39ca30',
   },
-
   product: {
     label: translate({message: 'Product'}),
     description: translate({
-      message: 'Docusaurus sites associated to a commercial product!',
+      message: 'Applications built with Yandex Foundation Models',
       id: 'showcase.tag.product.description',
     }),
-    color: '#dfd545',
+    color: '#127f82',
   },
-
   design: {
     label: translate({message: 'Design'}),
     description: translate({
-      message:
-        'Beautiful Docusaurus sites, polished and standing out from the initial template!',
+      message: 'Beautiful applications with a unique design',
       id: 'showcase.tag.design.description',
     }),
     color: '#a44fb7',
   },
-
-  i18n: {
-    label: translate({message: 'I18n'}),
-    description: translate({
-      message:
-        'Translated Docusaurus sites using the internationalization support with more than 1 locale.',
-      id: 'showcase.tag.i18n.description',
-    }),
-    color: '#127f82',
-  },
-
-  versioning: {
-    label: translate({message: 'Versioning'}),
-    description: translate({
-      message:
-        'Docusaurus sites using the versioning feature of the docs plugin to manage multiple versions.',
-      id: 'showcase.tag.versioning.description',
-    }),
-    color: '#fe6829',
-  },
-
-  large: {
-    label: translate({message: 'Large'}),
-    description: translate({
-      message:
-        'Very large Docusaurus sites, including many more pages than the average!',
-      id: 'showcase.tag.large.description',
-    }),
-    color: '#8c2f00',
-  },
-
-  meta: {
-    label: translate({message: 'Meta'}),
-    description: translate({
-      message: 'Docusaurus sites of Meta (formerly Facebook) projects',
-      id: 'showcase.tag.meta.description',
-    }),
-    color: '#4267b2', // Facebook blue
-  },
-
-  personal: {
-    label: translate({message: 'Personal'}),
-    description: translate({
-      message:
-        'Personal websites, blogs and digital gardens built with Docusaurus',
-      id: 'showcase.tag.personal.description',
-    }),
-    color: '#14cfc3',
-  },
-
-  rtl: {
-    label: translate({message: 'RTL Direction'}),
-    description: translate({
-      message:
-        'Docusaurus sites using the right-to-left reading direction support.',
-      id: 'showcase.tag.rtl.description',
-    }),
-    color: '#ffcfc3',
-  },
-};
+} as const;
 
 export const TagList = Object.keys(Tags) as TagType[];
 
@@ -231,7 +156,8 @@ const Users: User[] = [
     author: {
       name: "Dmitry Zhechkov",
       image: '/img/authors/dzhechkov.jpg',
-      title: "AI Engineer"
+      title: "AI Engineer",
+      profileUrl: "https://www.linkedin.com/in/dmitry-zhechkov-1037182/"
     }
   },
   {
@@ -244,7 +170,8 @@ const Users: User[] = [
     author: {
       name: "Dmitry Zhechkov",
       image: '/img/authors/dzhechkov.jpg',
-      title: "AI Engineer"
+      title: "AI Engineer",
+      profileUrl: "https://www.linkedin.com/in/dmitry-zhechkov-1037182/"
     }
   },
   {
@@ -257,7 +184,8 @@ const Users: User[] = [
     author: {
       name: "Dmitry Zhechkov",
       image: '/img/authors/dzhechkov.jpg',
-      title: "AI Engineer"
+      title: "AI Engineer",
+      profileUrl: "https://www.linkedin.com/in/dmitry-zhechkov-1037182/"
     }
   },
   {
@@ -270,7 +198,8 @@ const Users: User[] = [
     author: {
       name: "Dmitry Zhechkov",
       image: '/img/authors/dzhechkov.jpg',
-      title: "AI Engineer"
+      title: "AI Engineer",
+      profileUrl: "https://www.linkedin.com/in/dmitry-zhechkov-1037182/"
     }
   },
   {
@@ -283,7 +212,8 @@ const Users: User[] = [
     author: {
       name: "Dmitry Zhechkov",
       image: '/img/authors/dzhechkov.jpg',
-      title: "AI Engineer"
+      title: "AI Engineer",
+      profileUrl: "https://www.linkedin.com/in/dmitry-zhechkov-1037182/"
     }
   },
   {
@@ -296,7 +226,8 @@ const Users: User[] = [
     author: {
       name: "Dmitry Zhechkov",
       image: '/img/authors/dzhechkov.jpg',
-      title: "AI Engineer"
+      title: "AI Engineer",
+      profileUrl: "https://www.linkedin.com/in/dmitry-zhechkov-1037182/"
     }
   },
   {
@@ -309,7 +240,8 @@ const Users: User[] = [
     author: {
       name: "Dmitry Zhechkov",
       image: '/img/authors/dzhechkov.jpg',
-      title: "AI Engineer"
+      title: "AI Engineer",
+      profileUrl: "https://www.linkedin.com/in/dmitry-zhechkov-1037182/"
     }
   },
   {
@@ -322,7 +254,8 @@ const Users: User[] = [
     author: {
       name: "Dmitry Zhechkov",
       image: '/img/authors/dzhechkov.jpg',
-      title: "AI Engineer"
+      title: "AI Engineer",
+      profileUrl: "https://www.linkedin.com/in/dmitry-zhechkov-1037182/"
     }
   },
 
@@ -2669,4 +2602,4 @@ function sortUsers() {
   return result;
 }
 
-export const sortedUsers = sortUsers();
+export const sortedUsers: User[] = sortUsers();
