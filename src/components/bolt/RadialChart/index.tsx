@@ -83,7 +83,7 @@ export function RadialChart({ data }: RadialChartProps) {
       </div>
       
       <div className="relative flex justify-center items-center mt-4 overflow-visible">
-        <div className="transform transition-transform duration-300 ease-in-out hover:scale-150 origin-center cursor-zoom-in">
+        <div className="transform transition-transform duration-300 ease-in-out hover:[transform:scale(1.45)] origin-center cursor-zoom-in">
           <svg 
             width="100%" 
             height={dimensions.height}
