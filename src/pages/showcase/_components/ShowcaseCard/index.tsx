@@ -59,9 +59,16 @@ function getCardImage(user: User): string {
   );
 }
 
-function ShowcaseCard({user}: {user: User}) {
+interface Props {
+  user: User;
+}
+
+function ShowcaseCard({user}: Props) {
   const image = getCardImage(user);
   const [imageError, setImageError] = React.useState(false);
+
+  console.log('ShowcaseCard user:', user);
+  console.log('ShowcaseCard publishDate:', user.publishDate);
 
   return (
     <li key={user.title} className="card shadow--md">
@@ -96,16 +103,40 @@ function ShowcaseCard({user}: {user: User}) {
           )}
         </div>
         <p className={styles.showcaseCardBody}>{user.description}</p>
+        
+        <div className={styles.tagsAndDateContainer}>
+          <div className={styles.tagsContainer}>
+            <ShowcaseCardTag tags={user.tags} />
+          </div>
+          {user.publishDate && (
+            <div className={styles.publishDate}>
+              {new Date(user.publishDate).toLocaleDateString('ru-RU', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </div>
+          )}
+        </div>
+
         {user.author && (
-          <div className={styles.showcaseCardAuthor}>
+          <div 
+            className={clsx(
+              styles.showcaseCardAuthor,
+              user.author.profileUrl && styles.showcaseCardAuthorClickable
+            )}
+            onClick={() => {
+              if (user.author?.profileUrl) {
+                window.open(user.author.profileUrl, '_blank');
+              }
+            }}
+            role={user.author.profileUrl ? "link" : "presentation"}
+            style={user.author.profileUrl ? { cursor: 'pointer' } : undefined}
+          >
             <img 
               src={user.author.image} 
               alt={user.author.name}
               className={styles.authorImage}
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = '/img/default-author.jpg';
-              }}
             />
             <div className={styles.authorInfo}>
               <div className={styles.authorName}>{user.author.name}</div>
@@ -116,9 +147,6 @@ function ShowcaseCard({user}: {user: User}) {
           </div>
         )}
       </div>
-      <ul className={clsx('card__footer', styles.cardFooter)}>
-        <ShowcaseCardTag tags={user.tags} />
-      </ul>
     </li>
   );
 }

@@ -1,0 +1,60 @@
+.showcaseFavorite {
+  background-color: var(--site-color-favorite-background);
+  padding: 2rem 0;
+  margin: 0 0 2rem;
+}
+
+.headingFavorites {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 12px;
+  font-size: 2rem;
+  font-weight: bold;
+  line-height: 1.2;
+  color: var(--ifm-color-emphasis-900);
+}
+
+.headingAllSites {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  color: var(--ifm-color-emphasis-900);
+}
+
+.searchContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.showcaseCards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+@media (max-width: 996px) {
+  .showcaseCards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .showcaseCards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .showcaseCards {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 996px) {
+  .searchContainer {
+    justify-content: center;
+  }
+} 

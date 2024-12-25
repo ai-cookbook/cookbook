@@ -15,9 +15,9 @@ import ShowcaseSearchBar from '@site/src/pages/showcase/_components/ShowcaseSear
 import ShowcaseCards from './_components/ShowcaseCards';
 import ShowcaseFilters from './_components/ShowcaseFilters';
 
-const TITLE = translate({message: 'Docusaurus Site Showcase'});
+const TITLE = translate({message: 'Application Showcase'});
 const DESCRIPTION = translate({
-  message: 'List of websites people are building with Docusaurus',
+  message: 'Библиотека приложений, которые могут работать с Yandex Foundation Models',
 });
 const SUBMIT_URL = 'https://github.com/ai-cookbook/cookbook/discussions/7826';
 
@@ -28,7 +28,7 @@ function ShowcaseHeader() {
       <p>{DESCRIPTION}</p>
       <Link className="button button--primary" to={SUBMIT_URL}>
         <Translate id="showcase.header.button">
-          🙏 Please add your site
+          🙏 Добавить свое приложение
         </Translate>
       </Link>
     </section>

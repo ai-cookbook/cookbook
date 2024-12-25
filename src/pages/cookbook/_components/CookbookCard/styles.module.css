@@ -1,0 +1,171 @@
+:global(.card) {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+}
+
+:global(.card__body) {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  min-height: auto;
+}
+
+.cookbookCardHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  gap: 8px;
+}
+
+.cookbookCardTitle {
+  margin-bottom: 0;
+  flex: 1 1 auto;
+  font-size: 1.5rem;
+}
+
+.cookbookCardTitle a {
+  text-decoration: none;
+  background: linear-gradient(
+      var(--ifm-color-primary),
+      var(--ifm-color-primary)
+    )
+    0% 100% / 0% 1px no-repeat;
+  transition: background-size ease-out 200ms;
+}
+
+.cookbookCardTitle a:not(:focus):hover {
+  background-size: 100% 1px;
+}
+
+.cookbookCardBody {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+  max-height: 4.5em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+}
+
+.tagsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.publishDate {
+  font-size: 1rem;
+  color: var(--ifm-color-emphasis-600);
+  white-space: nowrap;
+  margin-left: 1rem;
+}
+
+.tag {
+  font-size: 0.875rem;
+  border: 1px solid var(--ifm-color-secondary-darkest);
+  cursor: default;
+  margin-right: 6px;
+  margin-bottom: 6px !important;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+}
+
+.tag .textLabel {
+  margin-right: 6px;
+}
+
+.tag .colorLabel {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.difficultyBadge {
+  font-size: 0.875rem;
+  padding: 4px 12px;
+  border-radius: 12px;
+  color: white;
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.cookbookCardAuthor {
+  display: flex;
+  align-items: center;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.cookbookCardAuthorClickable {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  padding: 0.5rem;
+  margin: -0.5rem;
+  border-radius: 8px;
+}
+
+.cookbookCardAuthorClickable:hover {
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.authorImage {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  object-fit: cover;
+}
+
+.authorInfo {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.authorName {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--ifm-color-emphasis-800);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.authorTitle {
+  font-size: 0.875rem;
+  color: var(--ifm-color-emphasis-600);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cookbookCardFooter {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.footerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.publishDate {
+  font-size: 1rem;
+  color: var(--ifm-color-emphasis-600);
+  margin-left: 1rem;
+  white-space: nowrap;
+} 
