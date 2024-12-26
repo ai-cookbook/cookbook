@@ -1,0 +1,215 @@
+---
+sidebar_position: 9
+title: Запуск ВМ с Docker в Yandex Cloud
+description: Как создать и настроить виртуальную машину с Docker в Yandex Cloud
+---
+
+# Запуск ВМ с Docker в Yandex Cloud
+
+В этом руководстве мы рассмотрим два способа создания и настройки виртуальной машины с Docker в Yandex Cloud:
+1. Использование Container Optimized Image (COI)
+2. Ручная установка Docker на Ubuntu
+
+## Способ 1: Использование Container Optimized Image
+
+Container Optimized Image (COI) - это оптимизированный образ операционной системы для запуска контейнеров в Yandex Cloud. Он предоставляет:
+- Предустановленный и настроенный Docker
+- Улучшенную безопасность
+- Автоматические обновления
+- Оптимизированную производительность
+
+### Создание ВМ с COI
+
+1. Перейдите в [консоль Yandex Cloud](https://console.cloud.yandex.ru)
+2. Выберите нужный каталог (folder)
+3. Перейдите в раздел "Compute Cloud"
+4. Нажмите "Создать ВМ"
+5. В разделе "Образы и диски":
+   - Нажмите "Marketplace"
+   - Найдите "Container Optimized Image"
+   - Выберите последнюю версию образа
+6. Настройте остальные параметры ВМ как обычно
+
+### Особенности использования COI
+
+- Образ регулярно обновляется автоматически
+- Корневая файловая система доступна только для чтения
+- Данные контейнеров хранятся на отдельном разделе
+- Встроенные механизмы безопасности
+
+Подробнее о COI можно узнать в:
+- [Официальной документации COI](https://cloud.yandex.ru/docs/cos/concepts/)
+- [Marketplace COI](https://cloud.yandex.ru/marketplace/products/yc/container-optimized-image)
+
+## Способ 2: Ручная установка Docker на Ubuntu
+
+Если вам нужен более гибкий подход или специфическая конфигурация, вы можете установить Docker вручную.
+
+## Предварительные требования
+
+- Аккаунт в Yandex Cloud
+- Активированный платежный аккаунт
+- [Установленный CLI Yandex Cloud](https://cloud.yandex.ru/docs/cli/quickstart)
+
+### 1. Создание виртуальной машины
+
+1. Перейдите в [консоль Yandex Cloud](https://console.cloud.yandex.ru)
+2. Выберите нужный каталог (folder)
+3. Перейдите в раздел "Compute Cloud"
+4. Нажмите "Создать ВМ"
+
+### 2. Настройка параметров ВМ
+
+1. Укажите имя ВМ
+2. Выберите зону доступности
+3. В разделе "Образы и диски" выберите:
+   - Операционная система: Ubuntu 22.04 LTS
+   - Диск: SSD, размер по необходимости (минимум 15 ГБ)
+4. В разделе "Вычислительные ресурсы" выберите:
+   - Платформа: Intel Ice Lake
+   - Гарантированная доля vCPU: 20%
+   - vCPU: 2
+   - RAM: 4 ГБ
+5. Настройте сеть:
+   - Создайте новую сеть или выберите существующую
+   - Включите публичный IP
+6. В разделе "Доступ" добавьте SSH-ключ
+
+## Установка Docker
+
+После создания ВМ подключитесь к ней по SSH и выполните следующие команды:
+
+```bash
+# Обновление системы
+sudo apt-get update
+sudo apt-get upgrade -y
+
+# Установка необходимых пакетов
+sudo apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
+# Добавление официального GPG-ключа Docker
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# Добавление репозитория Docker
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Установка Docker
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+
+# Добавление текущего пользователя в группу docker
+sudo usermod -aG docker $USER
+
+# Проверка установки
+docker --version
+```
+
+## Настройка Docker
+
+### 1. Настройка автозапуска
+
+```bash
+sudo systemctl enable docker
+sudo systemctl start docker
+```
+
+### 2. Настройка логирования
+
+```bash
+sudo nano /etc/docker/daemon.json
+```
+
+Добавьте следующее содержимое:
+
+```json
+{
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file": "3"
+  }
+}
+```
+
+Перезапустите Docker:
+
+```bash
+sudo systemctl restart docker
+```
+
+## Проверка работоспособности
+
+Запустите тестовый контейнер:
+
+```bash
+docker run hello-world
+```
+
+## Дополнительная настройка безопасности
+
+### 1. Настройка фаервола
+
+```bash
+# Установка ufw
+sudo apt-get install ufw
+
+# Настройка правил
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow ssh
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+
+# Включение фаервола
+sudo ufw enable
+```
+
+### 2. Настройка Docker Compose
+
+```bash
+# Установка Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+# Проверка установки
+docker-compose --version
+```
+
+## Полезные команды
+
+```bash
+# Просмотр запущенных контейнеров
+docker ps
+
+# Просмотр всех контейнеров
+docker ps -a
+
+# Просмотр образов
+docker images
+
+# Очистка неиспользуемых ресурсов
+docker system prune -a
+
+# Просмотр использования ресурсов
+docker stats
+```
+
+## Важные замечания
+
+1. Регулярно обновляйте систему и Docker
+2. Следите за использованием ресурсов
+3. Настройте мониторинг
+4. Создавайте резервные копии важных данных
+
+## Дополнительные ресурсы
+
+- [Документация Docker](https://docs.docker.com/)
+- [Документация Yandex Cloud](https://cloud.yandex.ru/docs)
+- [Docker Hub](https://hub.docker.com/) 

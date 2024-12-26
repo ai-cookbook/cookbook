@@ -1,0 +1,148 @@
+---
+sidebar_position: 4
+title: Начало работы с Search API
+description: Как начать использовать Yandex Search API v2
+---
+
+# Начало работы с Search API
+
+В этом руководстве мы рассмотрим, как начать работать с Yandex Search API v2 - современным интерфейсом для поиска в базе Яндекса.
+
+## Предварительные требования
+
+1. Аккаунт в Yandex Cloud
+2. Активированный платежный аккаунт
+3. Установленные утилиты:
+   - cURL
+   - jq
+   - base64
+
+## Подготовка к работе
+
+### 1. Создание сервисного аккаунта
+
+1. Создайте сервисный аккаунт в вашем облаке
+2. Назначьте аккаунту роль `search-api.webSearch.user` на каталог, в котором он был создан
+3. Выберите способ аутентификации (IAM-токен или API-ключ)
+
+### 2. Настройка аутентификации
+
+В API v2 поддерживается два способа аутентификации:
+
+#### Способ 1: Использование IAM-токена
+
+```bash
+Authorization: Bearer <IAM-токен>
+```
+
+#### Способ 2: Использование API-ключа
+
+```bash
+Authorization: Api-Key <API-ключ>
+```
+
+:::important
+Независимо от выбранного способа аутентификации, идентификатор каталога (`folderId`) должен передаваться в теле каждого запроса.
+:::
+
+## Выполнение поискового запроса
+
+### 1. Создание запроса
+
+Создайте файл `body.json` с параметрами поиска:
+
+```json
+{
+    "query": {
+      "searchType": "SEARCH_TYPE_RU",
+      "queryText": "Yandex Cloud",
+      "familyMode": "FAMILY_MODE_MODERATE",
+      "page": "0"
+    },
+    "sortSpec": {
+      "sortMode": "SORT_MODE_BY_RELEVANCE",
+      "sortOrder": "SORT_ORDER_DESC"
+    },
+    "groupSpec": {
+      "groupMode": "GROUP_MODE_DEEP",
+      "groupsOnPage": "10",
+      "docsInGroup": "3"
+    },
+    "maxPassages": "3",
+    "region": "225",
+    "l10N": "LOCALIZATION_RU",
+    "folderId": "<идентификатор_каталога>",
+    "responseFormat": "FORMAT_XML"
+}
+```
+
+### 2. Отправка запроса
+
+```bash
+curl \
+  --request POST \
+  --header "Authorization: Bearer <IAM-токен>" \
+  --data "@body.json" \
+  "https://searchapi.api.cloud.yandex.net/v2/web/searchAsync"
+```
+
+### 3. Получение результатов
+
+1. Сохраните полученный идентификатор операции (`id`)
+2. Проверяйте статус выполнения:
+
+```bash
+curl \
+  --request GET \
+  --header "Authorization: Bearer <IAM-токен>" \
+  https://operation.api.cloud.yandex.net/operations/<идентификатор_запроса>
+```
+
+3. Когда `"done": true`, получите и декодируйте результат:
+
+```bash
+# Получение результата
+curl \
+  --request GET \
+  --header "Authorization: Bearer <IAM-токен>" \
+  https://operation.api.cloud.yandex.net/operations/<идентификатор_запроса> \
+  > result.json
+
+# Декодирование Base64
+echo "$(< result.json)" | \
+  jq -r .response.rawData | \
+  base64 --decode > result.xml
+```
+
+## Параметры запроса
+
+### Типы поиска
+- `SEARCH_TYPE_RU` - Русский
+- `SEARCH_TYPE_TR` - Турецкий
+- `SEARCH_TYPE_COM` - Международный
+
+### Фильтрация результатов
+- `FAMILY_MODE_MODERATE` - умеренный фильтр (по умолчанию)
+- `FAMILY_MODE_NONE` - без фильтрации
+- `FAMILY_MODE_STRICT` - семейный фильтр
+
+### Сортировка
+- `SORT_MODE_BY_RELEVANCE` - по релевантности
+- `SORT_MODE_BY_TIME` - по времени изменения
+
+### Группировка
+- `GROUP_MODE_DEEP` - по доменам
+- `GROUP_MODE_FLAT` - плоская группировка
+
+## Важные замечания
+
+1. Максимальная длина запроса - 400 символов
+2. Время выполнения запроса может составлять от 5 минут до нескольких часов
+3. Количество групп на странице - от 1 до 100 (по умолчанию 20)
+4. Количество документов в группе - от 1 до 3 (по умолчанию 1)
+5. Количество пассажей - от 1 до 5 (по умолчанию 4)
+
+## Дополнительные ресурсы
+
+- [Документация Yandex Cloud](https://cloud.yandex.ru/docs)
+- [API Reference](https://cloud.yandex.ru/docs/search-api/) 
