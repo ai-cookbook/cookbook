@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@docusaurus/core": "3.6.3",
+    "@docusaurus/plugin-client-redirects": "^3.6.3",
     "@docusaurus/plugin-content-docs": "^3.6.3",
     "@docusaurus/plugin-ideal-image": "^3.6.3",
     "@docusaurus/plugin-rsdoctor": "^3.6.3",
@@ -27,7 +28,9 @@
     "clsx": "^2.0.0",
     "color": "^4.2.3",
     "colors": "^1.4.0",
+    "docusaurus-plugin-yandex-metrica": "^1.2.1",
     "lucide-react": "^0.469.0",
+    "npx": "^10.2.2",
     "prism-react-renderer": "^2.3.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

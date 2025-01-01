@@ -1,69 +1,55 @@
 ---
 title: Основы
+sidebar_title: Основы
 ---
 
-## Функционал:
+Сам по себе адаптер не добавляет никаких новых функций, он просто позволяет использовать модели Yandex Cloud через OpenAI SDK.
 
-```python
-# генерация текста
-client.chat.completions.create(
-        messages=[
-            {
-                "role": "user",
-                "content": 'В каком году был основан Яндекс?',
-            }
-        ],
-        model="yandexgpt/latest", 
-        # или f'gpt://{FOLDER_ID}/yandexgpt/latest' 
-        # или f'ds://{MODEL_ID}'
-        max_tokens=2000,
-        temperature=0.1,
-    )
-    
-# эмбеддинги текста
-client.embeddings.create(input = ['В каком году был основан Яндекс?'], model='text-search-doc/latest').data[0].embedding # или model=f'emb://{FOLDER_ID}/text-search-doc/latest'
-```
+### Поддерживаемые модели
 
-Подробные примеры содержатся в файлах [example.py](examples/example.py), [langchain-example.py](examples/langchain-example.py) и [example.js](examples/example.js).
+#### Генерация текста
 
-### Поддерживаемые модели:
+Адаптер преобразует ответы от Yandex Cloud в ответы OpenAI для обычной генерации, стримингового режима, с tools.
 
-* Все модели генерации текста, uri которых начинаются с `gpt://`
-* Все Embedding модели, uri которых начинаются с `emb://`
-* Все дообученные модели генерации текста, uri которых начинаются с `ds://`
-* Все дообученные Embedding модели, uri которых начинаются с `ds://` (пока такого функционала нет в Yandex Cloud)
+Вы можете использовать короткие названия моделей в параметре `model`, например:
+* `yandexgpt/rc`
+* `yandexgpt-lite/latest`
+* `llama/latest`
+* `llama-lite/latest`
 
-Фичи из SDK OpenAI: **стриминг** для генерации и **синхронные батчи** для эмбеддинг модели.
+Также можно использовать полные uri, например:
+* `gpt://{FOLDER_ID}/yandexgpt/rc`
+* `ds://{FOLDER_ID}/{MODEL_NAME}/latest`
+* `ds://{MODEL_ID}` (старый формат)
 
-Классификаторы, function calling, logprobs не поддерживаются.
+Также вы можете указывать модели OpenAI (например, `gpt-4o`). Подробнее в разделе [Маппинг моделей](mapping.mdx).
 
-### Аутентификация
+:::warning
 
-* **На стороне прокси.** Если опенаи ключ в запросе указать `sk-my`, ` ` или пустым, то кредиты для работы с Yandex Cloud будут искаться в переменных окружения. Задайте их для работы с этим сценарием в `.env` или `Dockerfile`.
+Deprecated режим работы с инструментами function calling и сообщения `assistant` с результатом работы инструментов не поддерживается адаптером. **Вместо этого используйте `tool_calls` и сообщения с ролью `tool`.**
 
-* **На стороне пользователя.** Если в данную проксю будет ходит несколько пользователей, то в качестве OpenAI ключа указывайте folder_id и статический апи-ключ или IAM-ключ, разделяя их символом `@` (например `folder_id@iam_key`).
+:::
 
-#### Как получить folder_id и api_key?
+#### Embeddings
 
-* [Инструкция по началу работы с YandexGPT](https://yandex.cloud/ru/docs/foundation-models/quickstart/yandexgpt#before-begin)
-* [Как получить IAM-токен / API-ключ и необходимые роли](https://yandex.cloud/ru/docs/foundation-models/api-ref/authentication#yandex-account_1)
+Адаптер может принимать несколько документов (текстов) за 1 синхронный запрос. Но в YC FOMO нет батчевой синхронной обработки эмбеддингов. Поэтому внутри себя адаптер он будет стараться обработать батч как можно быстрее в соответствии с вашей квотой.
 
-### Использование моделей gpt-4 как YandexGPT
+Вы можете использовать короткие названия моделей в параметре `model`, например:
+* `text-search-doc/latest`
+* `text-search-query/latest`
 
-Если вы ограничены в выборе моделей, но можете указать хотя-бы api-ключ и base_url, то можете обращаться к моделям OpenAI - запросы будут мапиться на модели YandexGPT:
-- gpt-4o -> yandexgpt/latest
-- gpt-4o-mini -> yandexgpt-lite/latest
-- text-embedding-3-large, text-embedding-3-small, text-embedding-ada-002 -> text-search-doc/latest
+Также можно использовать полные uri, например:
+* `emb://{FOLDER_ID}/text-search-doc/latest`
 
-### Планы
+Также вы можете указывать модели OpenAI (например, `text-embedding-3-small`). Подробнее в разделе [Маппинг моделей](mapping.mdx).
 
-* ~~Tests~~
-* ~~Logging~~
-* ~~Error handling~~
-* ~~Стриминг~~
-* ~~Синхронные батчи эмбеддинг-модели (для langchain)~~
-* Поддержка function calling
-* Поддержка OS моделей
-* Добавить поддержку классификаторов
-* Добавить поддержку дообученных эмбеддингов
-* Добавить поддержку YandexART
+### Расширенный функционал
+
+Для работы с Foundational Models, в купе с данным адаптером, рекомендуется использовать [liteLLM proxy](https://docs.litellm.ai/docs/simple_proxy). Это позволит настроить:
+
+* ограничени на количество параллельных генераций со своей стороны
+* огромное количество настроек для командной работы
+* огромное количество настроек для аутентификации
+* огромное количество настроек для бюджетов
+* огромное количество настроек для логирования, метрик, алертов
+* огромное количество настроек вообще

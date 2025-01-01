@@ -5,8 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 const isRsdoctor = false;
 
 const config: Config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'AI Cookbook',
+  tagline: 'Приложения и инструменты для AI, разработчикам и бизнесу',
   favicon: 'img/favicon.ico',
   markdown: {
     mermaid: true,
@@ -34,6 +34,38 @@ const config: Config = {
     defaultLocale: 'ru',
     locales: ['ru'],
   },
+
+  headTags: [
+    // Скрипт Яндекс.Метрики
+    {
+      tagName: 'script',
+      attributes: {
+        type: 'text/javascript',
+      },
+      innerHTML: `
+        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+        ym(99255215, "init", {
+          clickmap:true,
+          trackLinks:true,
+          accurateTrackBounce:true,
+          webvisor:true
+        });
+      `,
+    },
+    // NoScript тег для Яндекс.Метрики
+    {
+      tagName: 'noscript',
+      attributes: {},
+      innerHTML: `
+        <div><img src="https://mc.yandex.ru/watch/99255215" style="position:absolute; left:-9999px;" alt="" /></div>
+      `,
+    },
+  ],
 
   presets: [
     [
@@ -71,13 +103,24 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'AI Cookbook',
+      title: 'AI Cookbook β',
       logo: {
         alt: 'AI Cookbook Logo',
         src: 'img/logo.svg',
-        href: '/showcase',
+        href: '/',
       },
+      
       items: [
+        {
+          href: '/showcase',
+          label: 'Приложения',
+          position: 'left',
+        },
+        {
+          href: '/cookbook',
+          label: 'Руководства',
+          position: 'left',
+        },
         {
           type: 'dropdown',
           label: 'Разработчикам',
@@ -103,32 +146,21 @@ const config: Config = {
               sidebarId: 'appsSidebar',
               label: 'Self-hosted приложения',
             },
+            {
+              type: 'docSidebar',
+              sidebarId: 'promptsSidebar',
+              label: 'Промптбук',
+            },
           ],
         },
         {
-          type: 'docSidebar',
-          sidebarId: 'bizSidebar',
-          label: 'Бизнесу',
-        },
-        {
-          type: 'docSidebar',
-          sidebarId: 'promptsSidebar',
-          position: 'left',
-          label: 'Промптбук',
-        },
-        {
-          href: '/',
-          label: 'О проекте',
-          position: 'left',
-        },
-        {
-          href: '/contribute',
-          label: 'Конкурс на 100000₽',
+          href: '/docs/etc/contributing',
+          label: 'Участие',
           position: 'right',
         },
         {
           href: 'https://t.me/aicookbookbot',
-          label: 'Мне нужна помощь',
+          label: 'Помощь',
           position: 'right',
         },
         {
@@ -143,45 +175,69 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Ресурсы',
           items: [
             {
-              label: 'GenAI маркетплейс',
+              label: 'О проекте',
+              to: '/',
+            },
+            {
+              label: 'Лента приложений',
               to: '/showcase',
             },
             {
+              label: 'Лента руководств',
+              to: '/cookbook',
+            },
+            {
+              label: 'Документация адаптера',
+              to: '/docs/adapter/',
+            },
+            {
               label: 'Промптбук',
-              to: 'docs/prompts/',
+              to: '/docs/prompts/',
             },
             {
-              label: 'Адаптер',
-              to: 'docs/adapter/',
+              label: 'Бизнесу',
+              to: '/docs/biz/',
+            },
+          ],
+        },
+        {
+          title: 'Связь',
+          items: [
+            {
+              label: 'Участие',
+              href: '/docs/etc/contributing',
             },
             {
-              label: 'Статусы',
+              label: 'Помощь',
+              href: 'https://t.me/aicookbookbot',
+            },
+            {
+              label: 'Сообщество',
+              href: 'https://t.me/aicbcom',
+            },
+            {
+              label: 'Статус страницы',
               href: 'https://ai-cookbook-ru.cronitorstatus.com/',
             },
           ],
         },
         {
-          title: 'Community',
-          items: [
-            {
-              label: 'Сообщество',
-              href: 'https://t.me/aicookbook',
-            },
-            {
-              label: 'Contribute',
-              href: 'https://github.com/ai-cookbook/cookbook',
-            },
-          ],
-        },
-        {
-          title: 'More',
+          title: 'Ссылки',
           items: [
             {
               label: 'GitHub',
               href: 'https://github.com/ai-cookbook/cookbook',
+            },
+            {
+              label: 'GitHub адаптера',
+              href: 'https://github.com/ai-cookbook/openai-yandexgpt-adapter',
+            },
+            {
+              label: 'Документация Yandex Foundational Models',
+              href: 'https://cloud.yandex.ru/docs/foundation-models',
             },
           ],
         },
@@ -222,12 +278,21 @@ const config: Config = {
     },
     plugins: [
       [
-        'vercel-analytics',
+        '@docusaurus/plugin-client-redirects',
         {
-          debug: true,
-          mode: 'auto',
+          redirects: [
+            {
+              to: '/docs/biz/secondary/FC_why',
+              from: '/docs/biz/FC_why',
+            },
+          ],
         },
       ],
+      ['docusaurus-plugin-yandex-metrica', {
+        counterID: '99255215',
+        enableInProdOnly: false,
+        alternativeCdn: true,
+      }],
       isRsdoctor && [
         'rsdoctor',
         {

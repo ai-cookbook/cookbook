@@ -2,7 +2,10 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import { RadialChart } from '@site/src/components/bolt/RadialChart';
 import { UseCaseCard } from '@site/src/components/bolt/UseCaseCard';
+import YandexMetrika from '@site/src/components/YandexMetrika';
 import type { UseCase } from '@site/src/types/useCase';
+
+
 
 const useCaseData: UseCase[] = [
   {
@@ -106,6 +109,7 @@ export default function Home(): JSX.Element {
       title="Генеративный ИИ в Бизнесе"
       description="Исследование внедрения генеративного ИИ в бизнесе в 2024 году"
     >
+      <YandexMetrika />
       <main className="container mx-auto px-4 py-8">
         <RadialChart data={useCaseData} />
         

@@ -23,3 +23,5 @@ node_modules
 .cursorrules
 
 .env
+.cursorrules.txt
+package-lock.json

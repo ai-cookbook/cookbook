@@ -1,31 +1,124 @@
 
-### Коммунальные трансляторы (без деплоя)
+# Self-hosting
 
-1. **Yandex Cloud**, `ru-central1-a`. Stateless режим, запросы не логируются. https://apps.llmplay.space/translator Status: ![Yandex Offline](https://apps.llmplay.space/translator/badge)
+## Конфигурация (.env файл)
 
-2. **Vercel**, `Stockholm, Sweden`. Логирование на уровне INFO (персональные данные скрыты). https://openai2yandex-translator.vercel.app Status: ![Vercel Offline](https://openai2yandex-translator.vercel.app/badge)
+Ниже каждму параметру указано значение по умолчанию.
+
+#### Логирование
+
+* `LOG_TYPE=dev` - конфигурация вывода логов. Один из: `dev`, `yc`, `volume`, `stdout`.
+    1. `dev` - вывод в консоль с цветной подсветкой
+    2. `yc` - логирование в консоль в формате json для Yandex Cloud Logging
+    3. `volume` - логирование .log файл в монтированный том контейнера /logs
+    4. `stdout` - логирование в stdout
+
+* `LOG_LEVEL=DEBUG` - уровень логирования
+
+#### Флаг для отключения логирования в Yandex Cloud
+
+* `YC_FOMO_LOG_POLICY=true` - значение для заголовка x-data-logging-enabled по умолчанию, подробнее https://yandex.cloud/ru/docs/foundation-models/operations/disable-logging
+
+#### Флаги для включения ретраев
+
+:::note
+
+Foundational Models иногда возвращает 429 ошибку даже при **не** превышении квоты. Рекомендуется включить ретраи для эндпоинтов completions и embeddings.
+
+:::
+
+* `YC_COMPLETION_RETRIES=True` - включение ретраев для эндпоинта completions
+* `YC_EMBEDDINGS_RETRIES=True` - включение ретраев для эндпоинта embeddings
+
+#### Флаги для настройки пакетной обработки для эндпоинта embeddings
+
+:::note
+
+Foundational Models не поддерживает синхронную пакетную обработку эмбеддингов. Для совместимости с AIOps движками адаптер реализует пакетную обработку эмбеддингов, отправляя до N запросов в течении определенного окна времени, чтобы не превысить вашу квоту в Yandex Cloud, пока не будет обработан весь батч.
+
+:::
+
+* `YC_EMBEDDINGS_RATE_LIMIT=1` - ограничение на количество запросов в секунду
+* `YC_EMBEDDINGS_TIME_WINDOW=1` - временное окно для ограничения запросов
+* `YC_EMBEDDINGS_MAX_RETRIES=3` - максимальное количество ретраев
+* `YC_EMBEDDINGS_BACKOFF_FACTOR=2` - коэффициент для расчета времени ожидания между ретраями
+
+#### Настройка эндпоинтов
+
+*`YC_SERVICE_URL=https://llm.api.cloud.yandex.net` - url сервиса Yandex GPT
+
+#### Настройка маппинга моделей
+
+Указывайте модели в формате `OPENAI_MODEL_NAME:YC_MODEL_NAME/YC_MODEL_VERSION`.
+
+* `YC_COMPLETIONS_MODEL_MAP=gpt-4o:yandexgpt/latest,gpt-4o-mini:yandexgpt-lite/latest,gpt-3.5:yandexgpt/latest,gpt-3.5-turbo:yandexgpt/latest,gpt-5:yandexgpt/latest,llama-3.1-8b-instruct:llama-lite/latest,llama-3.1-70b-instruct:llama/latest`
+* `YC_EMBEDDINGS_MODEL_MAP=text-embedding-3-large:text-search-doc/latest,text-embedding-3-small:text-search-doc/latest,text-embedding-ada-002:text-search-doc/latest`
 
 
-### Быстрый запуск на vercel:
+<details>
+<summary>Конфигурации для всех публичных эндпоинтов</summary>
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fall-mute%2Fyagpt2openai_translator)
+```bash
+# highlight-start
+LOG_TYPE=yc
+LOG_LEVEL=INFO
 
-- Укажите в переменных окружения `VERCEL=True`, function max duration 60 секунд в настройках проекта и сделайте редеплой.
-- Для использования автоматической аутентификации, заполните `FOLDER_ID` & `YANDEX_API_KEY` на странице деплоя.
+YC_FOMO_LOG_POLICY=true
+# highlight-end
 
-### Локальный/облачный запуск
+YC_COMPLETION_RETRIES=True
+YC_EMBEDDINGS_RETRIES=True
 
-1. Если вам нужен доступ к ресурсам с автоматической аутентификацией, заполните данные параметры (in `.env` file, Dockerfile or cloud environment):
-    - `FOLDER_ID`: your Yandex Cloud folder id
-    - `YANDEX_API_KEY`: your Yandex Cloud API key
-2. Запустите приложение:
-    - `docker-compose up -d --build`. Приложение будет доступно по адресу 127.0.0.1:**9041**
-    - или (команды аналогичны для `podman`) `docker build -t image_name .`, затем `docker run -d -p 127.0.0.1:9041:9041 --name container_name image_name` 
-    - или (для локального тестирования) `pip install -r requirements.txt`, затем `python main.py`
+YC_EMBEDDINGS_RETRIES=True
 
-Может быть полезно: [Запуск контейнерного приложения в Yandex Serverless Containers](https://yandex.cloud/ru/docs/tutorials/serverless/deploy-app-container)
+YC_EMBEDDINGS_RATE_LIMIT=1
+YC_EMBEDDINGS_TIME_WINDOW=1
+YC_EMBEDDINGS_MAX_RETRIES=3
+YC_EMBEDDINGS_BACKOFF_FACTOR=2
 
-### Проверка работы
+YC_SERVICE_URL=https://llm.api.cloud.yandex.net
+
+YC_COMPLETIONS_MODEL_MAP=gpt-4o:yandexgpt/latest,gpt-4o-mini:yandexgpt-lite/latest,gpt-3.5:yandexgpt/latest,gpt-3.5-turbo:yandexgpt/latest,gpt-5:yandexgpt/latest,llama-3.1-8b-instruct:llama-lite/latest,llama-3.1-70b-instruct:llama/latest
+YC_EMBEDDINGS_MODEL_MAP=text-embedding-3-large:text-search-doc/latest,text-embedding-3-small:text-search-doc/latest,text-embedding-ada-002:text-search-doc/latest
+
+CLASSIFIER_DETECTION=true
+TUNED_CLASSIFIER_CALL_SEQ=///Classify next text///
+FS_CLASSIFIER_CALL_SEQ=///Classify next text with few shot model///
+
+CLASSIFIER_MODE=best_label
+CLASSIFIER_THRESHOLD=0
+
+```
+
+</details>
+
+## Способы разворачивания
+
+### Запуск на vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fai-cookbook%2Fopenai-yandexgpt-adapter)
+
+После успешного запуска приложения, рекомендуется настроить максимальное время выполения функций до 60 секунд.
+
+### Запуск на serverless контейнерах через github actions
+
+1. Используется [данный github action](https://github.com/yc-actions/yc-sls-container-deploy?tab=readme-ov-file#github-action-to-deploy-serverless-container-to-yandex-cloud). Прочитайте readme.md, action.yml и создайте сервисный аккаунт с необходимыми ролями.
+2. Создайте container registry json-ключ для сервисного аккаунта, который будет использоваться для аутентификации в Yandex Cloud.
+3. Создайте serverless контейнер в Yandex Cloud. Имя контейнера вам пригодится позже.
+3. Сделайте форк репозитория адаптера. Добавьте содержимое json-ключа в секреты github репозитория. Создайте свой файл .github/workflows/deploy-sls-my-adapter.yml.
+4. Измените содержимое файла в соответствии с вашими требованиями. Запуште изменения.
+
+Сразу после этого github actions запустится и развернет ваш адаптер. Вы можете использовать его как публичный эндпоинт, или настроить интеграцию с api-gateway, чтобы присвоить ему свой домен.
+
+### Локальный запуск
+
+Запустите приложение:
+- Docker: `docker-compose up -d --build` 
+- Python: `pip install -r requirements.txt`, затем `python main.py`
+
+Приложение будет доступно по адресу 127.0.0.1:**9041**
+
+## Проверка работы
 
 ```bash
 curl -X POST <PROXY_URL>/v1/chat/completions \

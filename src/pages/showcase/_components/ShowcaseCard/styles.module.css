@@ -5,14 +5,14 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-:global(.card) {
+.card {
   height: 100%;
   display: flex;
   flex-direction: column;
   min-height: 450px;
 }
 
-:global(.card__body) {
+.card__body {
   flex: 1;
   display: flex;
   flex-direction: column;
