@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import type {ReactNode} from 'react';
+import {useEffect, useMemo, useState, type ReactNode} from 'react';
 import clsx from 'clsx';
 import Translate from '@docusaurus/Translate';
 import {sortedUsers, type User} from '@site/src/data/users';
@@ -15,14 +15,6 @@ import ShowcaseCard from '../ShowcaseCard';
 import {useFilteredUsers} from '../../_utils';
 
 import styles from './styles.module.css';
-
-const favoriteUsers = sortedUsers.filter((user) =>
-  user.tags.includes('favorite'),
-);
-
-const otherUsers = sortedUsers.filter(
-  (user) => !user.tags.includes('favorite'),
-);
 
 function HeadingNoResult() {
   return (
@@ -72,7 +64,66 @@ function NoResultSection() {
   );
 }
 
+
+const item =  {
+    title: "Tokenizer YandexGPT",
+    description: "YandexGPT-токенизатор текста бесконечного размера.",
+    preview: '/img/showcase/yandexgpt-tokenizer.jpg',
+    website: "http://tokenizer.llmplay.ru:8501/",
+    source: null,
+    tags: ['product', 'favorite'],
+    publishDate: '2024-12-10',
+    author: {
+      name: "Dmitry Zhechkov",
+      image: '/img/authors/dzhechkov.jpg',
+      title: "AI Architect",
+      profileUrl: "https://www.linkedin.com/in/dmitry-zhechkov-1037182/"
+    }
+  }
+
+  const extraElem =    {
+    title: "YandexGPT чат-бот",
+    description: "Чат-бот на базе YandexGPT с поддержкой истории общения и настройки системного промпта. Требует ввода своих credentials.",
+    preview: '/img/showcase/yandexgpt-chatbot.jpg',
+    website: "https://yagpt-chatbot-context.streamlit.app/",
+    source: null,
+    tags: ['product', ],
+    publishDate: '2024-12-15',
+    author: {
+      name: "Dmitry Zhechkov",
+      image: '/img/authors/dzhechkov.jpg',
+      title: "AI Architect",
+      profileUrl: "https://www.linkedin.com/in/dmitry-zhechkov-1037182/"
+    }
+  }
+
 export default function ShowcaseCards() {
+  const [favoriteUsers, setFavoriteUsers] = useState<User[]>([]);
+
+  const isBigScreen = useMemo(()=> {
+return window.innerWidth > 1550
+  }, [window.innerWidth])
+
+  useEffect(() => {
+    const updateFavoriteUsers = () => {
+      const favoriteUsers = sortedUsers
+        .filter((user) => user.tags.includes('favorite'))
+        .slice(0, isBigScreen ? 4 : 3);
+      setFavoriteUsers(favoriteUsers);
+    };
+
+    window.addEventListener('resize', updateFavoriteUsers);
+    updateFavoriteUsers(); // Начальная установка
+
+    return () => window.removeEventListener('resize', updateFavoriteUsers);
+  }, []);
+
+  const otherUsers = sortedUsers.filter(
+      (user) => !user.tags.includes('favorite'),
+  );
+
+  
+
   const filteredUsers = useFilteredUsers();
 
   if (filteredUsers.length === 0) {
@@ -87,7 +138,7 @@ export default function ShowcaseCards() {
             <CardList heading={<HeadingFavorites />} items={favoriteUsers} />
           </div>
           <div className="margin-top--lg">
-            <CardList heading={<HeadingAllSites />} items={otherUsers} />
+            <CardList heading={<HeadingAllSites />} items={isBigScreen ? otherUsers: [...otherUsers, extraElem ]} />
           </div>
         </>
       ) : (

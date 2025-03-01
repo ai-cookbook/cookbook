@@ -10,13 +10,15 @@
   display: flex;
   flex-direction: column;
   min-height: 450px;
+  width: 100%;
+
 }
 
 .card__body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 215px;
+  /* min-height: 215px; */
 }
 
 .showcaseCardImage {
@@ -97,9 +99,8 @@
 .showcaseCardBody {
   font-size: 1rem;
   line-height: 1.5;
-  margin-bottom: 1rem;
   color: var(--ifm-color-emphasis-800);
-  flex: 1;
+  flex: 1;  
 }
 
 .cardFooter {
@@ -111,13 +112,11 @@
   font-size: 0.875rem;
   border: 1px solid var(--ifm-color-secondary-darkest);
   cursor: default;
-  margin-right: 6px;
-  margin-bottom: 6px !important;
-  border-radius: 12px;
+  border-radius: 6px;
   display: inline-flex;
   align-items: center;
-  padding: 2px 8px;
-  background: rgba(31, 34, 37, 0.4);
+  padding: 1px 4px;
+  background: transparent;
 }
 
 .tag .textLabel {
@@ -136,6 +135,9 @@
 .showcaseCardAuthor {
   display: flex;
   align-items: center;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  padding: 8px;
+  /* margin-top: 10px; */
 }
 
 .authorImage {
@@ -148,7 +150,7 @@
 
 .authorInfo {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; 
 }
 
 .authorName {
@@ -263,17 +265,16 @@
 
 .tagsAndDateContainer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  /* justify-content: space-between; */
+  align-items: center; 
 }
 
 .tagsContainer {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  /* flex-wrap: wrap;  */
+  gap: 8px;
+  margin-bottom: 6px;
+  margin-top: -12px;
 }
 
 .publishDate {

@@ -109,6 +109,21 @@ export const TagList = Object.keys(Tags) as TagType[];
 // prettier-ignore
 const Users: User[] = [
   {
+    title: "Tokenizer YandexGPT",
+    description: "YandexGPT-токенизатор текста бесконечного размера.",
+    preview: '/img/showcase/yandexgpt-tokenizer.jpg',
+    website: "http://tokenizer.llmplay.ru:8501/",
+    source: null,
+    tags: ['product', 'favorite'],
+    publishDate: '2024-12-10',
+    author: {
+      name: "Dmitry Zhechkov",
+      image: '/img/authors/dzhechkov.jpg',
+      title: "AI Architect",
+      profileUrl: "https://www.linkedin.com/in/dmitry-zhechkov-1037182/"
+    }
+  },
+  {
     title: "LobeChat",
     description: "Современное многопользовательское приложение с чатом и плагинами. Работает с Yandex Foundation Models (YandexGPT и т.п.).",
     preview: '/img/showcase/lobechat.jpg',
@@ -196,21 +211,6 @@ const Users: User[] = [
     }
   },
   {
-    title: "Tokenizer YandexGPT",
-    description: "YandexGPT-токенизатор текста бесконечного размера.",
-    preview: '/img/showcase/yandexgpt-tokenizer.jpg',
-    website: "http://tokenizer.llmplay.ru:8501/",
-    source: null,
-    tags: ['product'],
-    publishDate: '2024-12-10',
-    author: {
-      name: "Dmitry Zhechkov",
-      image: '/img/authors/dzhechkov.jpg',
-      title: "AI Architect",
-      profileUrl: "https://www.linkedin.com/in/dmitry-zhechkov-1037182/"
-    }
-  },
-  {
     title: "HR-bot по вакансии",
     description: "Помощник рекрутера, отвечает на вопросы по определенной вакансии (Архитектор в 'Яндекс Облако').",
     preview: '/img/showcase/hr-bot-vacancy.jpg',
@@ -269,7 +269,8 @@ const Users: User[] = [
       title: "AI Architect",
       profileUrl: "https://www.linkedin.com/in/dmitry-zhechkov-1037182/"
     }
-  }
+  },
+   
 ];
 
 function sortUsers() {

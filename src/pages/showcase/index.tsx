@@ -26,8 +26,8 @@ function ShowcaseHeader() {
     <section className="margin-top--lg margin-bottom--lg text--center">
       <Heading as="h1">{TITLE}</Heading>
       <p>{DESCRIPTION}</p>
-      <Link className="button button--primary" to={SUBMIT_URL}>
-        <Translate id="showcase.header.button">
+      <Link className="button button--primary  items-center justify-center" style={{width: 'auto', height:'40px', fontSize:'16px', fontWeight:'500'}} to={SUBMIT_URL}>
+        <Translate  id="showcase.header.button">
           🙏 Добавить свое приложение
         </Translate>
       </Link>
@@ -42,7 +42,7 @@ export default function Showcase(): JSX.Element {
         <ShowcaseHeader />
         <ShowcaseFilters />
         <div
-          style={{display: 'flex', marginLeft: 'auto'}}
+          style={{display: 'flex', marginRight: 'auto'}}
           className="container">
           <ShowcaseSearchBar />
         </div>

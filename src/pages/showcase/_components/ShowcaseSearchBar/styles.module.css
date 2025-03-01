@@ -6,7 +6,7 @@
  */
 
 .searchBar {
-  margin-left: auto;
+  /* margin-left: auto; */
 }
 
 .searchBar input {
@@ -14,4 +14,55 @@
   border-radius: 15px;
   padding: 10px;
   border: 1px solid gray;
+}
+
+.searchContainer {
+  position: relative;
+  max-width: 600px;
+  margin-right: auto;
+
+  /* margin: 0 auto; */
+}
+
+.searchInput {
+  width: 100%;
+  padding: 12px 45px 12px 16px;
+  font-size: 16px;
+  border: 2px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  background: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.searchInput:focus {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 3px var(--ifm-color-primary-lighter);
+}
+
+.searchInput::placeholder {
+  color: var(--ifm-color-emphasis-500);
+}
+
+.searchIcon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  fill: var(--ifm-color-emphasis-500);
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .searchInput {
+    font-size: 14px;
+    padding: 10px 40px 10px 14px;
+  }
+  
+  .searchIcon {
+    width: 18px;
+    height: 18px;
+    right: 14px;
+  }
 }
