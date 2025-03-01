@@ -137,7 +137,7 @@ function ShowcaseCard({user}: Props) {
               )}
             </div>
                {user.publishDate && (
-            <div className={"ml-auto"}>
+            <div className={"mr-2 ml-auto"}>
               {new Date(user.publishDate).toLocaleDateString('ru-RU', {
                 year: 'numeric',
                 month: '2-digit',
