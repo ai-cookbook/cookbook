@@ -109,8 +109,12 @@ export default function Home(): JSX.Element {
       title="Генеративный ИИ в Бизнесе"
       description="Исследование внедрения генеративного ИИ в бизнесе в 2024 году"
     >
+      <div className="container mx-auto px-4 pt-4">
+       <h1>Генеративный искуственный интеллект</h1>
+       <p>Генеративный ИИ стремительно развивается, открывая новые горизонты в творчестве и автоматизации. Современные модели способны создавать тексты, изображения и музыку, что находит применение в различных отраслях — от искусства до медицины, улучшая эффективность и расширяя возможности для инноваций.</p>
+      </div>
       <YandexMetrika />
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-6">
         <RadialChart data={useCaseData} />
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">

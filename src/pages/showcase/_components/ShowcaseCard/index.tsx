@@ -81,7 +81,7 @@ function ShowcaseCard({user}: Props) {
           onError={() => setImageError(true)}
         />
       </div>
-      <div className="card__body">
+      <div className="card__body mb-4">
         <div className={clsx(styles.showcaseCardHeader)}>
           <Heading as="h4" className={styles.showcaseCardTitle}>
             <Link href={user.website} className={styles.showcaseCardLink}>
@@ -98,32 +98,22 @@ function ShowcaseCard({user}: Props) {
                 'button button--secondary button--sm',
                 styles.showcaseCardSrcBtn,
               )}>
-              <Translate id="showcase.card.sourceLink">source</Translate>
+              <Translate id="showcase.card.sourceLink">Источник</Translate>
             </Link>
           )}
         </div>
         <p className={styles.showcaseCardBody}>{user.description}</p>
         
-        <div className={styles.tagsAndDateContainer}>
-          <div className={styles.tagsContainer}>
+        <div className={styles.tagsContainer}>
             <ShowcaseCardTag tags={user.tags} />
-          </div>
-          {user.publishDate && (
-            <div className={styles.publishDate}>
-              {new Date(user.publishDate).toLocaleDateString('ru-RU', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
-            </div>
-          )}
         </div>
 
-        {user.author && (
+      </div>
+      {user.author && (
           <div 
             className={clsx(
               styles.showcaseCardAuthor,
-              user.author.profileUrl && styles.showcaseCardAuthorClickable
+              user.author.profileUrl && styles.showcaseCardAuthorClickable, 'mt-auto'
             )}
             onClick={() => {
               if (user.author?.profileUrl) {
@@ -139,14 +129,24 @@ function ShowcaseCard({user}: Props) {
               className={styles.authorImage}
             />
             <div className={styles.authorInfo}>
+              {/* name */}
               <div className={styles.authorName}>{user.author.name}</div>
+              {/* job */}
               {user.author.title && (
                 <div className={styles.authorTitle}>{user.author.title}</div>
               )}
             </div>
+               {user.publishDate && (
+            <div className={"mr-2 ml-auto"}>
+              {new Date(user.publishDate).toLocaleDateString('ru-RU', {
+                year: 'numeric',
+                month: '2-digit',
+                day: 'numeric'
+              })}
+            </div>
+          )}
           </div>
         )}
-      </div>
     </li>
   );
 }

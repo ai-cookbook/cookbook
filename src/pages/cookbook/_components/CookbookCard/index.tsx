@@ -76,15 +76,6 @@ function CookbookCard({guide}: {guide: Recipe}) {
         <div className={styles.tagsContainer}>
           <CookbookCardTag tags={guide.tags} />
         </div>
-        {guide.publishDate && (
-          <div className={styles.publishDate}>
-            {new Date(guide.publishDate).toLocaleDateString('ru-RU', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })}
-          </div>
-        )}
       </div>
 
       <div className={styles.cookbookCardFooter}>
@@ -113,6 +104,15 @@ function CookbookCard({guide}: {guide: Recipe}) {
                 <div className={styles.authorTitle}>{guide.author.title}</div>
               )}
             </div>
+              {guide.publishDate && (
+          <div className={styles.publishDate}>
+            {new Date(guide.publishDate).toLocaleDateString('ru-RU', {
+              year: 'numeric',
+              month: '2-digit',
+              day: 'numeric'
+            })}
+          </div>
+        )}
           </div>
         )}
       </div>
